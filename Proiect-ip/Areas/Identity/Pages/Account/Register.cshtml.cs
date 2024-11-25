@@ -84,10 +84,6 @@ namespace Proiect_ip.Areas.Identity.Pages.Account
             [Display(Name = "Prenume")]
             public string Prenume { get; set; }
 
-            public int Puncte { get; set; } = 0;
-
-            public int NrComenzi { get; set; } = 0;
-
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -127,6 +123,11 @@ namespace Proiect_ip.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
+                user.Nume = Input.Nume;
+                user.Prenume = Input.Prenume;
+                user.NrComenzi = 0;
+                user.Puncte = 0;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
