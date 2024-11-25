@@ -1,4 +1,13 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Proiect_ip.Data;
+using Proiect_ip.Areas.Identity.Data;
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("Proiect_ipContextConnection") ?? throw new InvalidOperationException("Connection string 'Proiect_ipContextConnection' not found.");
+
+builder.Services.AddDbContext<Proiect_ipContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<Proiect_ipUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<Proiect_ipContext>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
