@@ -195,9 +195,6 @@ namespace Proiect_ip.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("NrComenzi")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nume")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -239,6 +236,174 @@ namespace Proiect_ip.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.CategorieProdus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Decscriere")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NumeCateg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CategoriiProduse");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.Comanda", b =>
+                {
+                    b.Property<int>("IdComanda")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdComanda"));
+
+                    b.Property<DateTime>("DataComanda")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("PretTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Proiect_ipUserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PuncteGenerate")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdComanda");
+
+                    b.HasIndex("Proiect_ipUserID");
+
+                    b.ToTable("Comenzi");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.ComandaProdus", b =>
+                {
+                    b.Property<int>("IdComanda")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdProdus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Cantitate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PretUnitar")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("IdComanda", "IdProdus");
+
+                    b.HasIndex("IdProdus");
+
+                    b.ToTable("ComandaProduse");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.IstoricPuncte", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DataAdaugare")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("IdComanda")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Motiv")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Proiect_ipUserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Puncte")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdComanda");
+
+                    b.HasIndex("Proiect_ipUserID");
+
+                    b.ToTable("IstoricPuncte");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.Produs", b =>
+                {
+                    b.Property<int>("IdProdus")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdProdus"));
+
+                    b.Property<string>("Descriere")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("IdCategorie")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdVoucher")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nume")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Pret")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Stoc")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdProdus");
+
+                    b.HasIndex("IdCategorie");
+
+                    b.HasIndex("IdVoucher");
+
+                    b.ToTable("Produse");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.Voucher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Cod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DataExpirare")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Proiect_ipUserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Proiect_ipUserID");
+
+                    b.ToTable("Vouchere");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -290,6 +455,111 @@ namespace Proiect_ip.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.Comanda", b =>
+                {
+                    b.HasOne("Proiect_ip.Areas.Identity.Data.Proiect_ipUser", "Utilizator")
+                        .WithMany("Comenzi")
+                        .HasForeignKey("Proiect_ipUserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Utilizator");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.ComandaProdus", b =>
+                {
+                    b.HasOne("Proiect_ip.Models.Comanda", "Comanda")
+                        .WithMany("ComandaProduse")
+                        .HasForeignKey("IdComanda")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Proiect_ip.Models.Produs", "Produs")
+                        .WithMany("ComandaProduse")
+                        .HasForeignKey("IdProdus")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comanda");
+
+                    b.Navigation("Produs");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.IstoricPuncte", b =>
+                {
+                    b.HasOne("Proiect_ip.Models.Comanda", "Comanda")
+                        .WithMany()
+                        .HasForeignKey("IdComanda")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Proiect_ip.Areas.Identity.Data.Proiect_ipUser", "User")
+                        .WithMany("IstoricPuncte")
+                        .HasForeignKey("Proiect_ipUserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Comanda");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.Produs", b =>
+                {
+                    b.HasOne("Proiect_ip.Models.CategorieProdus", "Categorie")
+                        .WithMany("Produse")
+                        .HasForeignKey("IdCategorie")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Proiect_ip.Models.Voucher", "Voucher")
+                        .WithMany("Produse")
+                        .HasForeignKey("IdVoucher")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Categorie");
+
+                    b.Navigation("Voucher");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.Voucher", b =>
+                {
+                    b.HasOne("Proiect_ip.Areas.Identity.Data.Proiect_ipUser", "CreatDe")
+                        .WithMany("Vouchere")
+                        .HasForeignKey("Proiect_ipUserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatDe");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Areas.Identity.Data.Proiect_ipUser", b =>
+                {
+                    b.Navigation("Comenzi");
+
+                    b.Navigation("IstoricPuncte");
+
+                    b.Navigation("Vouchere");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.CategorieProdus", b =>
+                {
+                    b.Navigation("Produse");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.Comanda", b =>
+                {
+                    b.Navigation("ComandaProduse");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.Produs", b =>
+                {
+                    b.Navigation("ComandaProduse");
+                });
+
+            modelBuilder.Entity("Proiect_ip.Models.Voucher", b =>
+                {
+                    b.Navigation("Produse");
                 });
 #pragma warning restore 612, 618
         }

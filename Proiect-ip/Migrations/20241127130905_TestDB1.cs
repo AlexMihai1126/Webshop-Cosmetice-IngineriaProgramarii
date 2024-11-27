@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Proiect_ip.Migrations
 {
     /// <inheritdoc />
-    public partial class InitUsers : Migration
+    public partial class TestDB1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,9 +32,8 @@ namespace Proiect_ip.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Nume = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Prenume = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Adresa = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Adresa = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Puncte = table.Column<int>(type: "int", nullable: false),
-                    NrComenzi = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -53,6 +52,20 @@ namespace Proiect_ip.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CategoriiProduse",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NumeCateg = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Decscriere = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoriiProduse", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -161,6 +174,134 @@ namespace Proiect_ip.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Comenzi",
+                columns: table => new
+                {
+                    IdComanda = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Proiect_ipUserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DataComanda = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PretTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PuncteGenerate = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comenzi", x => x.IdComanda);
+                    table.ForeignKey(
+                        name: "FK_Comenzi_AspNetUsers_Proiect_ipUserID",
+                        column: x => x.Proiect_ipUserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vouchere",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Cod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataExpirare = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Proiect_ipUserID = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vouchere", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Vouchere_AspNetUsers_Proiect_ipUserID",
+                        column: x => x.Proiect_ipUserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IstoricPuncte",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Proiect_ipUserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Puncte = table.Column<int>(type: "int", nullable: false),
+                    Motiv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataAdaugare = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdComanda = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IstoricPuncte", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IstoricPuncte_AspNetUsers_Proiect_ipUserID",
+                        column: x => x.Proiect_ipUserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IstoricPuncte_Comenzi_IdComanda",
+                        column: x => x.IdComanda,
+                        principalTable: "Comenzi",
+                        principalColumn: "IdComanda",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Produse",
+                columns: table => new
+                {
+                    IdProdus = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdCategorie = table.Column<int>(type: "int", nullable: false),
+                    IdVoucher = table.Column<int>(type: "int", nullable: true),
+                    Nume = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Pret = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Descriere = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Stoc = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Produse", x => x.IdProdus);
+                    table.ForeignKey(
+                        name: "FK_Produse_CategoriiProduse_IdCategorie",
+                        column: x => x.IdCategorie,
+                        principalTable: "CategoriiProduse",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Produse_Vouchere_IdVoucher",
+                        column: x => x.IdVoucher,
+                        principalTable: "Vouchere",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ComandaProduse",
+                columns: table => new
+                {
+                    IdComanda = table.Column<int>(type: "int", nullable: false),
+                    IdProdus = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Cantitate = table.Column<int>(type: "int", nullable: false),
+                    PretUnitar = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ComandaProduse", x => new { x.IdComanda, x.IdProdus });
+                    table.ForeignKey(
+                        name: "FK_ComandaProduse_Comenzi_IdComanda",
+                        column: x => x.IdComanda,
+                        principalTable: "Comenzi",
+                        principalColumn: "IdComanda",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ComandaProduse_Produse_IdProdus",
+                        column: x => x.IdProdus,
+                        principalTable: "Produse",
+                        principalColumn: "IdProdus",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -199,6 +340,41 @@ namespace Proiect_ip.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComandaProduse_IdProdus",
+                table: "ComandaProduse",
+                column: "IdProdus");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comenzi_Proiect_ipUserID",
+                table: "Comenzi",
+                column: "Proiect_ipUserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IstoricPuncte_IdComanda",
+                table: "IstoricPuncte",
+                column: "IdComanda");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IstoricPuncte_Proiect_ipUserID",
+                table: "IstoricPuncte",
+                column: "Proiect_ipUserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Produse_IdCategorie",
+                table: "Produse",
+                column: "IdCategorie");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Produse_IdVoucher",
+                table: "Produse",
+                column: "IdVoucher");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vouchere_Proiect_ipUserID",
+                table: "Vouchere",
+                column: "Proiect_ipUserID");
         }
 
         /// <inheritdoc />
@@ -220,7 +396,25 @@ namespace Proiect_ip.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ComandaProduse");
+
+            migrationBuilder.DropTable(
+                name: "IstoricPuncte");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Produse");
+
+            migrationBuilder.DropTable(
+                name: "Comenzi");
+
+            migrationBuilder.DropTable(
+                name: "CategoriiProduse");
+
+            migrationBuilder.DropTable(
+                name: "Vouchere");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
