@@ -126,7 +126,6 @@ namespace Proiect_ip.Areas.Identity.Pages.Account
 
                 user.Nume = Input.Nume;
                 user.Prenume = Input.Prenume;
-                user.NrComenzi = 0;
                 user.Puncte = 0;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -139,6 +138,7 @@ namespace Proiect_ip.Areas.Identity.Pages.Account
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    await _userManager.AddToRoleAsync(user, "Client");
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
