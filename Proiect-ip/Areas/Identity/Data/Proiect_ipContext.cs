@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Proiect_ip.Areas.Identity.Data;
 using Proiect_ip.Models;
+using static Proiect_ip.Models.Comanda;
 
 namespace Proiect_ip.Data
 {
@@ -27,6 +28,12 @@ namespace Proiect_ip.Data
             // Relatie dintre user si comanda
             builder.Entity<Comanda>()
                 .HasKey(c => c.IdComanda);
+
+            builder.Entity<Comanda>()
+                .Property(c => c.Status)
+                .HasConversion(
+                    v => v.ToString(), // Enum in string
+                    v => (ComandaStatus)Enum.Parse(typeof(ComandaStatus), v)); // Conversie din string inapoi in Enum la citire
 
             builder.Entity<Comanda>()
                 .HasOne(c => c.Utilizator)

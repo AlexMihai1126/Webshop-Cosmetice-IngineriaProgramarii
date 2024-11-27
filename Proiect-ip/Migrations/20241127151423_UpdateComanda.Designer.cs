@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Proiect_ip.Data;
 
@@ -11,9 +12,11 @@ using Proiect_ip.Data;
 namespace Proiect_ip.Migrations
 {
     [DbContext(typeof(Proiect_ipContext))]
-    partial class Proiect_ipContextModelSnapshot : ModelSnapshot
+    [Migration("20241127151423_UpdateComanda")]
+    partial class UpdateComanda
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
