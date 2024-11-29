@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Proiect_ip.Models
+namespace Proiect_ip.Models.DTO
 {
     public class ProdusDto
     {

@@ -8,11 +8,13 @@ namespace Proiect_ip.Models
     {
         public int Id { get; set; }
         public int IdComanda { get; set; }
-        public Comanda Comanda { get; set; }
         public int IdProdus { get; set; }
-        public Produs Produs { get; set; }
         public int Cantitate { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal PretUnitar { get; set; }
+
+        //Navigation properties
+        public Comanda Comanda { get; set; }
+        public Produs Produs { get; set; }
     }
 }

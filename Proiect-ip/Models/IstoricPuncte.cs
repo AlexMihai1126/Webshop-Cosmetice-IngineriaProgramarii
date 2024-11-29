@@ -7,11 +7,13 @@ namespace Proiect_ip.Models
     {
         public int Id { get; set; }
         public string Proiect_ipUserID { get; set; }
-        public Proiect_ipUser User { get; set; }
         public int Puncte { get; set; }
         public string? Motiv { get; set; }
         public DateTime DataAdaugare { get; set; }
         public int? IdComanda { get; set; }
+
+        //Navigation properties
         public Comanda Comanda { get; set; }
+        public Proiect_ipUser User { get; set; }
     }
 }
