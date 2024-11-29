@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="DB_Exports\" />
   </ItemGroup>
 
 </Project>

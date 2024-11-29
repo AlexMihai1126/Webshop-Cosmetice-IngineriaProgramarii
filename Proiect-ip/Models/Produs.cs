@@ -16,6 +16,8 @@ namespace Proiect_ip.Models
         public decimal Pret { get; set; }
         public string Descriere { get; set; }
         public int Stoc { get; set; }
+        public byte[] ImageData { get; set; }
+        public string ImageType { get; set; }
     }
 
 }
