@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Proiect_ip.Data;
 using Proiect_ip.Models;
+using Proiect_ip.Models.DTO;
 
 namespace Proiect_ip.Pages.Admin
 {

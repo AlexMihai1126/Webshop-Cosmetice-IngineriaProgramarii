@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Proiect_ip.Data;
 using Proiect_ip.Models;
+using Proiect_ip.Models.DTO;
 
 namespace Proiect_ip.Pages.Admin
 {
@@ -10,9 +11,8 @@ namespace Proiect_ip.Pages.Admin
     {
         private readonly IWebHostEnvironment environment;
         private readonly Proiect_ipContext context;
-        public List<SelectListItem> Categorii { get; set; }
         [BindProperty]
-        public CategorieProdus Categorie { get; set; }
+        public CategorieDto Categorie { get; set; }
         public CreateCategoriiModel(IWebHostEnvironment environment, Proiect_ipContext context)
         {
             this.environment = environment;
@@ -20,18 +20,24 @@ namespace Proiect_ip.Pages.Admin
         }
         public void OnGet()
         {
-            Categorie = new CategorieProdus();
+            Categorie = new CategorieDto();
         }
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-            Console.WriteLine($"Salvare categorie: {Categorie.NumeCateg}");
-            context.CategoriiProduse.Add(Categorie);
-            context.SaveChanges();
+
+            var categNoua = new CategorieProdus
+            {
+                NumeCateg = Categorie.Nume,
+                Descriere = Categorie.Descriere
+            };
+            await context.CategoriiProduse.AddAsync(categNoua);
+            await context.SaveChangesAsync();
             return RedirectToPage("/Admin/Categorii");
         }
+
     }
 }

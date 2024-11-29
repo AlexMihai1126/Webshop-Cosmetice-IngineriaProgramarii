@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Proiect_ip.Data;
 using Proiect_ip.Models;
+using Proiect_ip.Models.DTO;
 
 namespace Proiect_ip.Pages.Admin
 {
