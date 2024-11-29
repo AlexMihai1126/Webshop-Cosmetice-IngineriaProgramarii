@@ -1,0 +1,35 @@
+﻿@page
+@model Proiect_ip.Pages.Admin.CreateCategoriiModel
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Creare categorie";
+}
+<div class="container">
+    <h2 class="text-center mb-5">Categorie nouă</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3 row">
+            <label class="col-sm-4 col-form-label">Nume</label>
+            <div class="col-sm-8">
+                <input class="form-control" asp-for="Categorie.NumeCateg">
+                <span asp-validation-for="Categorie.NumeCateg" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-sm-4 col-form-label">Descriere</label>
+            <div class="col-sm-8">
+                <input class="form-control" asp-for="Categorie.Descriere">
+                <span asp-validation-for="Categorie.Descriere" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success">Salvează</button>
+                <a class="btn btn-danger" href="/Admin/Categorii" role="button">Anulează</a>
+            </div>
+        </div>
+    </form>
+</div>

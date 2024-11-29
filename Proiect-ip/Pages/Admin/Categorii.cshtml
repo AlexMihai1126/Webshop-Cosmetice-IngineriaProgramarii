@@ -4,4 +4,52 @@
 @attribute [Authorize(Roles = "Admin")]
 @{
     <p>Aceasta este o pagina accesibila doar admin-ului.</p>
+    ViewData["Title"] = "Admin categorii";
 }
+<div class="container-fluid">
+    <h2 class="text-center mb-5">Lista de categorii</h2>
+
+    <hr />
+
+    <div class="d-grid gap-2">
+        <a class='btn btn-success' href='/Admin/CreateCategorii'>Categorie nouă</a>
+    </div>
+
+    <hr />
+    @if (Model.Categorii.Count() == 0)
+    {
+        <div class="<div class=" col-md-3 col-sm-6 mb-4">
+            <div class="alert alert-danger mx-auto role="alert">
+                Nu s-au găsit categorii.
+            </div>
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped table-hover">
+            <thead>
+            <th>ID</th>
+            <th>Nume</th>
+            <th>Descriere</th>
+            <th>Acțiuni</th>
+            </thead>
+
+            <tbody class="table-group-divider">
+
+                @foreach (var cat in Model.Categorii)
+                {
+                    <tr>
+                        <td>@cat.Id</td>
+                        <td>@cat.NumeCateg</td>
+                        <td>@cat.Descriere</td>
+                        <td style="white-space:nowrap">
+                            <button type="button" class="btn btn-sm btn-success" onclick="window.location.href='/Admin/EditCategorii?id=@cat.Id'">Modifică</button>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="window.location.href='/Admin/DeleteCategorii?id=@cat.Id'">Șterge</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</div>
