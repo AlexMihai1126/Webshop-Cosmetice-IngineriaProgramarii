@@ -1,0 +1,25 @@
+﻿@page
+@model Proiect_ip.Areas.Identity.Pages.Account.Manage.ViewRewardsModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<Proiect_ipUser> UserManager
+
+@{
+    ViewData["Title"] = "Vezi recompense";
+    Layout = "~/Areas/Identity/Pages/Account/Manage/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3>Recompense</h3>
+    </div>
+    <div class="card-body">
+        @if (Model.Points.HasValue)
+        {
+            <p>Ai <strong>@Model.Points.Value</strong> puncte.</p>
+        }
+        else
+        {
+            <p>Eroare la incarcarea punctelor. Va rugam sa reincercati.</p>
+        }
+    </div>
+</div>

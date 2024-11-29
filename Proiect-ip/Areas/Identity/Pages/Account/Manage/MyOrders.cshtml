@@ -1,0 +1,44 @@
+﻿@page
+@model Proiect_ip.Areas.Identity.Pages.Account.Manage.MyOrdersModel
+@{
+    ViewData["Title"] = "Comenzile mele";
+    Layout = "~/Areas/Identity/Pages/Account/Manage/_Layout.cshtml";
+}
+
+<h2>Comenzile mele</h2>
+
+@if (Model.Orders.Count == 0)
+{
+    <p>Nu exista comenzi.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th>Suma totala</th>
+                    <th>Actiuni</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Orders.Count; i++)
+                {
+                    var order = Model.Orders[i];
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@order.DataComanda.ToShortDateString()</td>
+                        <td>@order.Status</td>
+                        <td>@order.PretTotal.ToString() Lei</td>
+                        <td>
+                            <a asp-page="/Account/Manage/OrderDetails" asp-route-id="@order.IdComanda" class="btn btn-primary btn-sm">Vizualizare (TODO)</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
