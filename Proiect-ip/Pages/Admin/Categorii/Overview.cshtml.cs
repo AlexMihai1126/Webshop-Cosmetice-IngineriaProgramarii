@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Proiect_ip.Data;
 using Proiect_ip.Models;
 
-namespace Proiect_ip.Pages.Admin
+namespace Proiect_ip.Pages.Admin.Categorii
 {
     public class CategoriiModel : PageModel
     {

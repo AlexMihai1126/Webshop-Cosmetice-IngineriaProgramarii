@@ -1,9 +1,8 @@
 ﻿@page
-@model Proiect_ip.Pages.Admin.DeleteCategoriiModel
+@model Proiect_ip.Pages.Admin.Categorii.DeleteCategoriiModel
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Roles = "Admin")]
 @{
-    <p>Aceasta este o pagina accesibila doar admin-ului.</p>
     ViewData["Title"] = "Ștergere categorie";
 }
 <div class="container">
@@ -17,7 +16,7 @@
         <div class="mb-3 row">
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-danger">Șterge</button>
-                <a class="btn btn-secondary" href="/Admin/Categorii" role="button">Anulează</a>
+                <a class="btn btn-secondary" href="/Admin/Categorii/Overview" role="button">Anulează</a>
             </div>
         </div>
     </form>

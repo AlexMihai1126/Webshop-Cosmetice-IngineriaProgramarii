@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Proiect_ip.Data;
 using Proiect_ip.Models;
 
-namespace Proiect_ip.Pages.Admin
+namespace Proiect_ip.Pages.Admin.Produse
 {
     public class ProduseModel : PageModel
     {

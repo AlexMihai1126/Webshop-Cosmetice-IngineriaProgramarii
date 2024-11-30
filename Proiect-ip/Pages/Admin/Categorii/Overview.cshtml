@@ -1,9 +1,8 @@
 ﻿@page
-@model Proiect_ip.Pages.Admin.CategoriiModel
+@model CategoriiModel
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Roles = "Admin")]
 @{
-    <p>Aceasta este o pagina accesibila doar admin-ului.</p>
     ViewData["Title"] = "Admin categorii";
 }
 <div class="container-fluid">
@@ -12,7 +11,7 @@
     <hr />
 
     <div class="d-grid gap-2">
-        <a class='btn btn-success' href='/Admin/CreateCategorii'>Categorie nouă</a>
+        <a class='btn btn-success' href='/Admin/Categorii/Creare'>Categorie nouă</a>
     </div>
 
     <hr />
@@ -43,8 +42,8 @@
                         <td>@cat.NumeCateg</td>
                         <td>@cat.Descriere</td>
                         <td style="white-space:nowrap">
-                            <button type="button" class="btn btn-sm btn-success" onclick="window.location.href='/Admin/EditCategorii?id=@cat.Id'">Modifică</button>
-                            <button type="button" class="btn btn-sm btn-danger" onclick="window.location.href='/Admin/DeleteCategorii?id=@cat.Id'">Șterge</button>
+                            <button type="button" class="btn btn-sm btn-success" onclick="window.location.href='/Admin/Categorii/Edit?id=@cat.Id'">Modifică</button>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="window.location.href='/Admin/Categorii/Stergere?id=@cat.Id'">Șterge</button>
                         </td>
                     </tr>
                 }

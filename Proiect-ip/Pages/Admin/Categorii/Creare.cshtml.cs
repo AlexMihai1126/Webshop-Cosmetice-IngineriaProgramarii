@@ -5,7 +5,7 @@ using Proiect_ip.Data;
 using Proiect_ip.Models;
 using Proiect_ip.Models.DTO;
 
-namespace Proiect_ip.Pages.Admin
+namespace Proiect_ip.Pages.Admin.Categorii
 {
     public class CreateCategoriiModel : PageModel
     {
@@ -36,7 +36,7 @@ namespace Proiect_ip.Pages.Admin
             };
             await context.CategoriiProduse.AddAsync(categNoua);
             await context.SaveChangesAsync();
-            return RedirectToPage("/Admin/Categorii");
+            return RedirectToPage("/Admin/Categorii/Overview");
         }
 
     }

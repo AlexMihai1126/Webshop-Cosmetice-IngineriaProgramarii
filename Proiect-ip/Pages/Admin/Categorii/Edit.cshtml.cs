@@ -4,7 +4,7 @@ using Proiect_ip.Data;
 using Proiect_ip.Models;
 using Proiect_ip.Models.DTO;
 
-namespace Proiect_ip.Pages.Admin
+namespace Proiect_ip.Pages.Admin.Categorii
 {
     public class EditCategoriiModel : PageModel
     {
@@ -22,36 +22,34 @@ namespace Proiect_ip.Pages.Admin
         {
             if (id == null)
             {
-                Response.Redirect("/Admin/Categorii");
+                Response.Redirect("/Admin/Categorii/Overview");
                 return;
             }
             var categ = context.CategoriiProduse.Find(id);
             if (categ == null)
             {
-                Response.Redirect("/Admin/Categorii");
+                Response.Redirect("/Admin/Categorii/Overview");
                 return;
             }
             CategorieDto.Nume = categ.NumeCateg;
             CategorieDto.Descriere = categ.Descriere;
             CategorieProdus = categ;
         }
-        public void OnPost(int? id)
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (!ModelState.IsValid)
             {
-                Response.Redirect("/Admin/Categorii");
-                return;
+                return RedirectToPage("/Admin/Categorii/Overview");
             }
             var categ = context.CategoriiProduse.Find(id);
             if (categ == null)
             {
-                Response.Redirect("/Admin/Categorii");
-                return;
+                return RedirectToPage("/Admin/Categorii/Overview");
             }
             categ.NumeCateg = CategorieDto.Nume;
             categ.Descriere = CategorieDto.Descriere;
-            context.SaveChanges();
-            Response.Redirect("/Admin/Categorii");
+            await context.SaveChangesAsync();
+            return RedirectToPage("/Admin/Categorii/Overview");
         }
     }
 }

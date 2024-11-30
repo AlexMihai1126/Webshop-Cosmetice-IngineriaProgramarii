@@ -1,0 +1,25 @@
+﻿@page
+@model Proiect_ip.Pages.Admin.AdaugaPuncteTestModel
+@using Microsoft.AspNetCore.Identity
+@using Proiect_ip.Areas.Identity.Data
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Testare sistem puncte";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Adauga puncte utilizatorului logat</h2>
+    <form method="post">
+        <div class="mb-3">
+            <label for="points" class="form-label">Numar de puncte de adaugat</label>
+            <input type="number" class="form-control" id="points" asp-for="Points" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Adauga</button>
+    </form>
+
+    @if (Model.Message != null)
+    {
+        <div class="alert alert-success mt-3">@Model.Message</div>
+    }
+</div>

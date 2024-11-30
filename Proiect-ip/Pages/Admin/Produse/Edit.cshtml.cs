@@ -5,7 +5,7 @@ using Proiect_ip.Data;
 using Proiect_ip.Models;
 using Proiect_ip.Models.DTO;
 
-namespace Proiect_ip.Pages.Admin
+namespace Proiect_ip.Pages.Admin.Produse
 {
     public class EditProduseModel : PageModel
     {
@@ -21,61 +21,65 @@ namespace Proiect_ip.Pages.Admin
         {
             this.environment = environment;
             this.context = context;
+            Categorii = context.CategoriiProduse.Select(CategoriiProduse => new SelectListItem { Text = CategoriiProduse.NumeCateg, Value = CategoriiProduse.Id.ToString() }).ToList();
+            Categorii.Insert(0, new SelectListItem { Text = "Fara categorie", Value = "" });
         }
         public void OnGet(int? id)
         {
             if (id == null)
             {
-                Response.Redirect("/Admin/Produse");
+                Response.Redirect("/Admin/Produse/Overview");
                 return;
             }
 
             var produs = context.Produse.Find(id);
             if (produs == null)
             {
-                Response.Redirect("/Admin/Produse");
+                Response.Redirect("/Admin/Produse/Overview");
                 return;
             }
-            Categorii = context.CategoriiProduse.Select(CategoriiProduse => new SelectListItem { Text = CategoriiProduse.NumeCateg, Value = CategoriiProduse.Id.ToString() }).ToList();
             ProdusDto.Nume = produs.Nume;
+            ProdusDto.Brand = produs.Brand;
             ProdusDto.Descriere = produs.Descriere;
-
-
             ProdusDto.Pret = produs.Pret;
-
             ProdusDto.Stoc = produs.Stoc;
-            ProdusDto.CategorieId = (int)produs.IdCategorie;
+            ProdusDto.CategorieId = produs.IdCategorie;
             Produs = produs;
         }
 
-        public void OnPost(int? id)
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
+
             if (id == null)
             {
-                Response.Redirect("/Admin/Produse");
-                return;
+                return RedirectToPage("/Admin/Produse/Overview");
             }
 
             var produs = context.Produse.Find(id);
             if (produs == null)
             {
-                Response.Redirect("/Admin/Produse");
-                return;
+                return RedirectToPage("/Admin/Produse/Overview");
             }
 
-            // update produs in baza de date 
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
             produs.Nume = ProdusDto.Nume;
+            produs.Brand = ProdusDto.Brand;
 
             produs.Descriere = ProdusDto.Descriere;
 
             produs.Pret = ProdusDto.Pret;
 
             produs.Stoc = ProdusDto.Stoc;
+
             produs.IdCategorie = ProdusDto.CategorieId;
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
-            Response.Redirect("/Admin/Produse");
+            return RedirectToPage("/Admin/Produse/Overview");
         }
     }
 }

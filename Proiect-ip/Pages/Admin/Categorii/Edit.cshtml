@@ -1,10 +1,12 @@
 ﻿@page
-@model Proiect_ip.Pages.Admin.EditCategoriiModel
+@model Proiect_ip.Pages.Admin.Categorii.EditCategoriiModel
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
 @{
     ViewData["Title"] = "Modificare categorie";
 }
 <div class="container">
-    <h2 class="text-center mb-5">Modificare produs</h2>
+    <h2 class="text-center mb-5">Modificare categorie</h2>
 
     <form method="post" enctype="multipart/form-data">
 
@@ -34,7 +36,7 @@
         <div class="mb-3 row">
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-success">Salvează</button>
-                <a class="btn btn-danger" href="/Admin/Categorii" role="button">Anulează</a>
+                <a class="btn btn-danger" href="/Admin/Categorii/Overview" role="button">Anulează</a>
             </div>
         </div>
 
