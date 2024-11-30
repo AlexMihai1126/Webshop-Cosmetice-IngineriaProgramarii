@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Proiect_ip.Areas.Identity.Data
 @inject UserManager<Proiect_ipUser> UserManager
+@inject Proiect_ip.Services.PointsService PointsService
 
 @{
     var user = await UserManager.GetUserAsync(User);
@@ -8,12 +9,14 @@
 
     if (user != null)
     {
-        points = user.Puncte; 
+        var userId = user.Id; // Get the user's ID
+        points = await PointsService.GetPointsAsync(userId); // Fetch points from PointsService
     }
 }
-@if(user != null){
+
+@if (user != null)
+{
     <div>
         <a class="nav-link text-dark" href="/Identity/Account/Manage/ViewRewards">Puncte: @(points)</a>
     </div>
 }
-

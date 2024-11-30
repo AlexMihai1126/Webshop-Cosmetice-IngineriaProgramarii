@@ -126,7 +126,6 @@ namespace Proiect_ip.Areas.Identity.Pages.Account
 
                 user.Nume = Input.Nume;
                 user.Prenume = Input.Prenume;
-                user.Puncte = 0;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

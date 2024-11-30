@@ -13,9 +13,9 @@
         <h3>Recompense</h3>
     </div>
     <div class="card-body">
-        @if (Model.Points.HasValue)
+        @if (Model.Points != 0)
         {
-            <p>Ai <strong>@Model.Points.Value</strong> puncte.</p>
+            <p>Ai <strong>@Model.Points</strong> puncte.</p>
         }
         else
         {

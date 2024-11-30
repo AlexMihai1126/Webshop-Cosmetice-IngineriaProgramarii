@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Proiect_ip.Data;
 using Proiect_ip.Areas.Identity.Data;
+using Proiect_ip.Services;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Proiect_ipContextConnection") ?? throw new InvalidOperationException("Connection string 'Proiect_ipContextConnection' not found.");
 
@@ -13,6 +14,24 @@ builder.Services.AddDefaultIdentity<Proiect_ipUser>(options => options.SignIn.Re
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<PointsService>();
+
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Events.OnSigningIn = async context =>
+    {
+        var userId = context.Principal?.FindFirst("sub")?.Value;
+        if (!string.IsNullOrEmpty(userId))
+        {
+            using var scope = context.HttpContext.RequestServices.CreateScope();
+            var pointsService = scope.ServiceProvider.GetRequiredService<PointsService>();
+            await pointsService.CacheUserPointsAsync(userId);
+        }
+    };
+});
+
 
 var app = builder.Build();
 
