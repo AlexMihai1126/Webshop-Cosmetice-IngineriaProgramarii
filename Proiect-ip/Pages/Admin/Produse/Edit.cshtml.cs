@@ -61,6 +61,22 @@ namespace Proiect_ip.Pages.Admin.Produse
                 return RedirectToPage("/Admin/Produse/Overview");
             }
 
+            byte[] imageBytes = null;
+
+            if (ProdusDto.Image != null)
+            {
+                if (ProdusDto.Image.ContentType != "image/png" && ProdusDto.Image.ContentType != "image/jpeg")
+                {
+                    ModelState.AddModelError("ProdusDto.Image", "Se pot incarca doar imagini PNG sau JPEG.");
+                }
+                else
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await ProdusDto.Image.CopyToAsync(memoryStream);
+                        imageBytes = memoryStream.ToArray();
+                    }
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -68,15 +84,12 @@ namespace Proiect_ip.Pages.Admin.Produse
 
             produs.Nume = ProdusDto.Nume;
             produs.Brand = ProdusDto.Brand;
-
             produs.Descriere = ProdusDto.Descriere;
-
             produs.Pret = ProdusDto.Pret;
-
             produs.Stoc = ProdusDto.Stoc;
-
             produs.IdCategorie = ProdusDto.CategorieId;
-
+            produs.ImageData = imageBytes;
+            produs.ImageType = ProdusDto.Image?.ContentType;
             await context.SaveChangesAsync();
 
             return RedirectToPage("/Admin/Produse/Overview");

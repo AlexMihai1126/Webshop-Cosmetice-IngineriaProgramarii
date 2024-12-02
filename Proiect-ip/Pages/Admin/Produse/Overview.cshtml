@@ -17,24 +17,24 @@
     <hr />
     @if (Model.Produs.Count() == 0)
     {
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="alert alert-danger mx-auto" role="alert">
-                Nu s-au găsit produse.
-            </div>
+        <div class="alert alert-danger mx-auto" role="alert">
+            Nu s-au găsit produse.
         </div>
     }
     else
     {
         <table class="table table-striped table-hover">
             <thead>
-            <th>Brand</th>
-            <th>Nume</th>
-            <th>Descriere</th>
-            <th>Pret</th>
-            <th>Categorie</th>
-            <th>Stoc</th>
-            <th>Imagine</th>
-            <th>Actiuni</th>
+                <tr>
+                    <th>Brand</th>
+                    <th>Nume</th>
+                    <th>Descriere</th>
+                    <th>Pret</th>
+                    <th>Categorie</th>
+                    <th>Stoc</th>
+                    <th>Imagine</th>
+                    <th>Actiuni</th>
+                </tr>
             </thead>
             <tbody class="table-group-divider">
                 @foreach (var produs in Model.Produs)
