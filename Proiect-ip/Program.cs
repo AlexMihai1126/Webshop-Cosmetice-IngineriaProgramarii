@@ -16,6 +16,8 @@ builder.Services.AddDefaultIdentity<Proiect_ipUser>(options => options.SignIn.Re
 builder.Services.AddRazorPages();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<PointsService>();
+builder.Services.AddScoped<ProductSearchService>();
+builder.Services.AddScoped<ShoppingCartService>();
 
 
 builder.Services.ConfigureApplicationCookie(options =>

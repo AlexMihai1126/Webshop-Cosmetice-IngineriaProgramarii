@@ -18,7 +18,7 @@ namespace Proiect_ip.Services
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                query = query.Where(p => p.Nume.ToLower().Contains(searchTerm) || p.Brand.ToLower().Contains(searchTerm));
+                query = query.Where(p => p.Nume.ToLower().Contains(searchTerm));
             }
 
             return await query.ToListAsync();
