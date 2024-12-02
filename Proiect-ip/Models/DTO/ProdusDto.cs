@@ -8,7 +8,7 @@ namespace Proiect_ip.Models.DTO
         [Required(ErrorMessage = "Nume is required")]
         public string Nume { get; set; }
         [Required(ErrorMessage = "Brand is required")]
-        public string Brand { get; set; }
+        public int BrandId { get; set; }
 
         [Required(ErrorMessage = "Descriere is required")]
         public string Descriere { get; set; }

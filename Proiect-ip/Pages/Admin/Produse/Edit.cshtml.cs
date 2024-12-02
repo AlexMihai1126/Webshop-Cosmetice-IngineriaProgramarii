@@ -12,7 +12,7 @@ namespace Proiect_ip.Pages.Admin.Produse
         private readonly IWebHostEnvironment environment;
         private readonly Proiect_ipContext context;
         public List<SelectListItem> Categorii { get; set; }
-
+        public List<SelectListItem> Branduri { get; set; }
 
         [BindProperty]
         public ProdusDto ProdusDto { get; set; } = new ProdusDto();
@@ -23,6 +23,9 @@ namespace Proiect_ip.Pages.Admin.Produse
             this.context = context;
             Categorii = context.CategoriiProduse.Select(CategoriiProduse => new SelectListItem { Text = CategoriiProduse.NumeCateg, Value = CategoriiProduse.Id.ToString() }).ToList();
             Categorii.Insert(0, new SelectListItem { Text = "Fara categorie", Value = "" });
+            Branduri = context.Branduri
+               .Select(b => new SelectListItem { Text = b.NumeBrand, Value = b.BrandId.ToString() })
+               .ToList();
         }
         public void OnGet(int? id)
         {
@@ -39,7 +42,7 @@ namespace Proiect_ip.Pages.Admin.Produse
                 return;
             }
             ProdusDto.Nume = produs.Nume;
-            ProdusDto.Brand = produs.Brand;
+            ProdusDto.BrandId = produs.IdBrand;
             ProdusDto.Descriere = produs.Descriere;
             ProdusDto.Pret = produs.Pret;
             ProdusDto.Stoc = produs.Stoc;
@@ -83,7 +86,7 @@ namespace Proiect_ip.Pages.Admin.Produse
             }
 
             produs.Nume = ProdusDto.Nume;
-            produs.Brand = ProdusDto.Brand;
+            produs.IdBrand = ProdusDto.BrandId;
             produs.Descriere = ProdusDto.Descriere;
             produs.Pret = ProdusDto.Pret;
             produs.Stoc = ProdusDto.Stoc;

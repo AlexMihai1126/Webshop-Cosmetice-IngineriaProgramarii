@@ -1,0 +1,23 @@
+﻿@page
+@model Proiect_ip.Pages.Admin.Branduri.DeleteBranduriModel
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Ștergere brand";
+}
+<div class="container">
+    <h1 class="text-center mb-5">Confirmare ștergere</h1>
+    <hr />
+    <h2 class="text-center">Sigur dorești să ștergi brandul?</h2>
+    <hr />
+    <form method="post">
+        <input type="hidden" name="id" value="@Model.BrandProdus.BrandId" />
+
+        <div class="mb-3 row">
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-danger">Șterge</button>
+                <a class="btn btn-secondary" href="/Admin/Branduri/Overview" role="button">Anulează</a>
+            </div>
+        </div>
+    </form>
+</div>
