@@ -1,0 +1,52 @@
+﻿@page
+@model Proiect_ip.Pages.Admin.Branduri.BranduriModel
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Admin branduri";
+}
+<div class="container-fluid">
+    <h2 class="text-center mb-5">Lista de branduri</h2>
+
+    <hr />
+
+    <div class="d-grid gap-2">
+        <a class='btn btn-success' href='/Admin/Branduri/Creare'>Brand nou</a>
+    </div>
+
+    <hr />
+    @if (Model.Branduri.Count() == 0)
+    {
+        <div class="alert alert-danger" role="alert">
+            Nu s-au găsit branduri.
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nume</th>
+                    <th>Acțiuni</th>
+                </tr>
+            </thead>
+
+            <tbody class="table-group-divider">
+
+                @foreach (var br in Model.Branduri)
+                {
+                    <tr>
+                        <td>@br.BrandId</td>
+                        <td>@br.NumeBrand</td>
+                        <td style="white-space:nowrap">
+                            <button type="button" class="btn btn-sm btn-success" onclick="window.location.href='/Admin/Branduri/Edit?id=@br.BrandId'">Modifică</button>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="window.location.href='/Admin/Branduri/Stergere?id=@br.BrandId'">Șterge</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</div>

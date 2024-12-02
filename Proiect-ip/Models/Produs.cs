@@ -8,7 +8,7 @@ namespace Proiect_ip.Models
         public int? IdCategorie { get; set; }
         public int? IdVoucher { get; set; }
         public string Nume { get; set; }
-        public string Brand { get; set; }
+        public int IdBrand { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Pret { get; set; }
         public string Descriere { get; set; }
@@ -19,6 +19,7 @@ namespace Proiect_ip.Models
         //Navigation properties
         public CategorieProdus Categorie { get; set; }
         public Voucher Voucher { get; set; }
+        public Brand Brand { get; set; }
         public ICollection<Comanda> Comenzi { get; set; }
         public ICollection<ComandaProdus> ComandaProduse { get; set; }
     }

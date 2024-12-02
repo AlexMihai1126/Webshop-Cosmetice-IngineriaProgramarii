@@ -8,6 +8,6 @@ namespace Proiect_ip.Models
         [Required(ErrorMessage = "Nume is required")]
         public string NumeCateg { get; set; }
         public string? Descriere { get; set; }
-        public ICollection<Produs> Produse { get; set; }
+        public ICollection<Produs> ProduseCategorie { get; set; }
     }
 }

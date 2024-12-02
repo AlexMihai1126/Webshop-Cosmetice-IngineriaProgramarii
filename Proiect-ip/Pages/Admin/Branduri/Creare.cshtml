@@ -1,0 +1,27 @@
+﻿@page
+@model Proiect_ip.Pages.Admin.Branduri.CreateBranduriModel
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Creare brand";
+}
+<div class="container">
+    <h2 class="text-center mb-5">Brand nou</h2>
+
+    <form method="post">
+        <div class="mb-3 row">
+            <label class="col-sm-4 col-form-label">Nume</label>
+            <div class="col-sm-8">
+                <input class="form-control" asp-for="Brand.Nume">
+                <span asp-validation-for="Brand.Nume" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success">Salvează</button>
+                <a class="btn btn-danger" href="/Admin/Branduri/Overview" role="button">Anulează</a>
+            </div>
+        </div>
+    </form>
+</div>

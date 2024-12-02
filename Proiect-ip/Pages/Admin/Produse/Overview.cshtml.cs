@@ -20,6 +20,7 @@ namespace Proiect_ip.Pages.Admin.Produse
         {
             Produs = context.Produse
                         .Include(p => p.Categorie)
+                        .Include(p => p.Brand)
                         .OrderByDescending(p => p.IdProdus)
                         .ToList();
         }

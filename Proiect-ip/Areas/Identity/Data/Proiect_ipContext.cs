@@ -20,6 +20,7 @@ namespace Proiect_ip.Data
         public DbSet<CategorieProdus> CategoriiProduse { get; set; }
         public DbSet<IstoricPuncte> IstoricPuncte { get; set; }
         public DbSet<ComandaProdus> ComandaProduse { get; set; }
+        public DbSet<Brand> Branduri { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -55,14 +56,19 @@ namespace Proiect_ip.Data
                 .WithMany(p => p.ComandaProduse)
                 .HasForeignKey(cp => cp.IdProdus);
 
-            // Relatie intre produs si categorie produs
+            //Brand cu produs
+            builder.Entity<Brand>()
+                .HasKey(b => b.BrandId);
+
+            builder.Entity<Brand>()
+                .HasMany(b => b.ProduseBrand) // Relatie 1:M cu tabelul Produs
+                .WithOne(p => p.Brand)
+                .HasForeignKey(p => p.IdBrand)
+                .OnDelete(DeleteBehavior.Cascade); //Se sterge produsul daca se sterge brandul
+
+            // Produs
             builder.Entity<Produs>()
                 .HasKey(p => p.IdProdus);
-
-            builder.Entity<Produs>()
-                .HasOne(p => p.Categorie)
-                .WithMany(c => c.Produse)
-                .HasForeignKey(p => p.IdCategorie);
 
             // Relatie intre produs si voucher
             builder.Entity<Produs>()
@@ -96,7 +102,7 @@ namespace Proiect_ip.Data
                 .HasKey(c => c.Id); // PK
 
             builder.Entity<CategorieProdus>()
-                .HasMany(c => c.Produse) // Relatie 1:M cu tabelul Produs
+                .HasMany(c => c.ProduseCategorie) // Relatie 1:M cu tabelul Produs
                 .WithOne(p => p.Categorie)
                 .HasForeignKey(p => p.IdCategorie)
                 .OnDelete(DeleteBehavior.SetNull); //Se sterge categoria din produs daca se sterge categoria

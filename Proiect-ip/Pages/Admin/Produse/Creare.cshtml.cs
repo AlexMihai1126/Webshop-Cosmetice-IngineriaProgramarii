@@ -15,6 +15,7 @@ namespace Proiect_ip.Pages.Admin.Produse
         private readonly IWebHostEnvironment environment;
         private readonly Proiect_ipContext context;
         public List<SelectListItem> Categorii { get; set; }
+        public List<SelectListItem> Branduri {  get; set; }
 
 
         [BindProperty]
@@ -28,6 +29,10 @@ namespace Proiect_ip.Pages.Admin.Produse
                .Select(c => new SelectListItem { Text = c.NumeCateg, Value = c.Id.ToString() })
                .ToList();
             Categorii.Insert(0, new SelectListItem { Text = "Fara categorie", Value = "" });
+
+            Branduri = context.Branduri
+               .Select(b => new SelectListItem { Text = b.NumeBrand, Value = b.BrandId.ToString() })
+               .ToList();
         }
 
         public void OnGet()
@@ -65,7 +70,7 @@ namespace Proiect_ip.Pages.Admin.Produse
                 Descriere = ProdusDto.Descriere,
                 Pret = ProdusDto.Pret,
                 Stoc = ProdusDto.Stoc,
-                Brand = ProdusDto.Brand,
+                IdBrand = ProdusDto.BrandId,
                 IdCategorie = ProdusDto.CategorieId == 0 ? (int?)null : ProdusDto.CategorieId,
                 ImageData = imageBytes != null ? imageBytes : null,
                 ImageType = ProdusDto.Image?.ContentType

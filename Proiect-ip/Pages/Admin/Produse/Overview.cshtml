@@ -17,7 +17,7 @@
     <hr />
     @if (Model.Produs.Count() == 0)
     {
-        <div class="alert alert-danger mx-auto" role="alert">
+        <div class="alert alert-danger" role="alert">
             Nu s-au găsit produse.
         </div>
     }
@@ -40,7 +40,7 @@
                 @foreach (var produs in Model.Produs)
                 {
                     <tr>
-                        <td>@produs.Brand</td>
+                        <td>@produs.Brand.NumeBrand</td>
                         <td>@produs.Nume</td>
                         <td>
                             <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#prodDescModal-@produs.IdProdus">Descriere</button>
