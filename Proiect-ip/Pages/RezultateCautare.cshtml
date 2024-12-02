@@ -1,0 +1,23 @@
+﻿@page
+@model Proiect_ip.Pages.RezultateCautareModel
+@{
+    ViewData["Title"] = "Rezultate cautare";
+}
+
+@if (Model.Produse != null && Model.Produse.Count > 0)
+{
+    <div>
+        @foreach (var produs in Model.Produse)
+        {
+            <div class="product-item">
+                <h5>@produs.Nume</h5>
+                <p>@produs.Descriere</p>
+                <p>Pret: @(produs.Pret) RON</p>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Nu am gasit produse.</p>
+}
