@@ -9,17 +9,17 @@
 }
 
 <div class="container mt-5">
-    <h2 class="text-center">Adauga puncte utilizatorului logat</h2>
+    <h2 class="text-center">Adauga sau scade puncte utilizatorului logat</h2>
     <form method="post">
         <div class="mb-3">
             <label for="points" class="form-label">Numar de puncte de adaugat</label>
             <input type="number" class="form-control" id="points" asp-for="Points" required>
         </div>
-        <button type="submit" class="btn btn-primary">Adauga</button>
+        <button type="submit" class="btn btn-primary">Modifica</button>
     </form>
 
     @if (Model.Message != null)
     {
-        <div class="alert alert-success mt-3">@Model.Message</div>
+        <div class="alert alert-info mt-3">@Model.Message</div>
     }
 </div>

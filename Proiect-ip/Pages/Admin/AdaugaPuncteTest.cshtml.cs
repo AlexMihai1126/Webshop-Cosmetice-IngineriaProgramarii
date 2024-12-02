@@ -25,14 +25,23 @@ namespace Proiect_ip.Pages.Admin
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
+
             if (user == null)
             {
                 return RedirectToPage("/Account/Login", new { area = "Identity" });
             }
 
-            await _pointsService.AddPointsAsync(user.Id, Points);
-
-            Message = $"Am adaugat {Points} de puncte contului!";
+            try
+            {
+                await _pointsService.ModifyPointsAsync(user.Id, Points);
+            }
+            catch(InvalidOperationException)
+            {
+                Message = "Punctele nu pot fi <0 !";
+                return Page();
+            }
+            
+            Message = $"Am modificat cu {Points} puncte contul!";
             return Page();
         }
     }

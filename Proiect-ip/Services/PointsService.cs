@@ -38,8 +38,15 @@ namespace Proiect_ip.Services
             return pctTotal;
         }
 
-        public async Task AddPointsAsync(string userId, int nrPuncteAdaugat)
+        public async Task ModifyPointsAsync(string userId, int nrPuncteAdaugat)
         {
+            int nrPctCurent = await GetPointsAsync(userId);
+
+            if (nrPctCurent + nrPuncteAdaugat < 0)
+            {
+                throw new InvalidOperationException("Cannot deduct points. The operation would result in negative points.");
+            }
+
             var pctNoi = new IstoricPuncte
             {
                 Proiect_ipUserID = userId,
