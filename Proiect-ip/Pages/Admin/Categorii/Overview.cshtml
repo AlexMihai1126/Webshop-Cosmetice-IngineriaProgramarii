@@ -17,20 +17,20 @@
     <hr />
     @if (Model.Categorii.Count() == 0)
     {
-        <div class="<div class=" col-md-3 col-sm-6 mb-4">
-            <div class="alert alert-danger mx-auto role="alert">
-                Nu s-au găsit categorii.
-            </div>
+        <div class="alert alert-danger" role="alert">
+            Nu s-au găsit categorii.
         </div>
     }
     else
     {
         <table class="table table-striped table-hover">
             <thead>
-            <th>ID</th>
-            <th>Nume</th>
-            <th>Descriere</th>
-            <th>Acțiuni</th>
+                <tr>
+                    <th>ID</th>
+                    <th>Nume</th>
+                    <th>Descriere</th>
+                    <th>Acțiuni</th>
+                </tr>
             </thead>
 
             <tbody class="table-group-divider">
