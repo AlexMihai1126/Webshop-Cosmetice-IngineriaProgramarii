@@ -12,6 +12,7 @@ namespace Proiect_ip.Areas.Identity.Pages.Account.Manage
         private readonly PointsService _pointsService;
 
         public int Points { get; set; }
+        public string? Message { get; set; }
 
         public ViewRewardsModel(UserManager<Proiect_ipUser> userManager, PointsService pointsService)
         {
@@ -26,7 +27,14 @@ namespace Proiect_ip.Areas.Identity.Pages.Account.Manage
             
             if (user != null)
             {
-               Points = await _pointsService.GetPointsAsync(user.Id);
+                try
+                {
+                    Points = await _pointsService.GetPointsAsync(user.Id);
+                }
+                catch (Exception)
+                {
+                    Message = "Eroare la incarcarea punctelor. Va rugam sa reincercati.";
+                }
             }
         }
     }

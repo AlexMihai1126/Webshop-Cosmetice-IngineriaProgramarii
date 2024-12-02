@@ -9,6 +9,7 @@ namespace Proiect_ip.Services
     {
         private readonly IMemoryCache _cache;
         private readonly Proiect_ipContext _context;
+        private readonly int POINTS_CAP = 100000;
 
         public PointsService(IMemoryCache cache, Proiect_ipContext context)
         {
@@ -38,7 +39,7 @@ namespace Proiect_ip.Services
             return pctTotal;
         }
 
-        public async Task ModifyPointsAsync(string userId, int nrPuncteAdaugat)
+        public async Task<int> ModifyPointsAsync(string userId, int nrPuncteAdaugat)
         {
             int nrPctCurent = await GetPointsAsync(userId);
 
@@ -46,6 +47,8 @@ namespace Proiect_ip.Services
             {
                 throw new InvalidOperationException("Cannot deduct points. The operation would result in negative points.");
             }
+
+            nrPuncteAdaugat = nrPuncteAdaugat > POINTS_CAP ? POINTS_CAP : nrPuncteAdaugat;
 
             var pctNoi = new IstoricPuncte
             {
@@ -56,8 +59,9 @@ namespace Proiect_ip.Services
 
             _context.IstoricPuncte.Add(pctNoi);
             await _context.SaveChangesAsync();
-
             await CacheUserPointsAsync(userId);
+
+            return nrPuncteAdaugat;
         }
     }
 

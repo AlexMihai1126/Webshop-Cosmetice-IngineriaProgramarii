@@ -9,14 +9,16 @@
 
     if (user != null)
     {
-        var userId = user.Id; // Get the user's ID
-        points = await PointsService.GetPointsAsync(userId); // Fetch points from PointsService
+        var userId = user.Id;
+        points = await PointsService.GetPointsAsync(userId);
     }
 }
 
 @if (user != null)
 {
-    <div>
-        <a class="nav-link text-dark" href="/Identity/Account/Manage/ViewRewards">Puncte: @(points)</a>
-    </div>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link text-dark" href="/Identity/Account/Manage/ViewRewards">Puncte: @(points)</a>
+        </li>
+    </ul>
 }

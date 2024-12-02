@@ -22,6 +22,8 @@ namespace Proiect_ip.Pages.Admin
 
         public string? Message { get; set; }
 
+        private int pctModif {  get; set; }
+
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -33,7 +35,7 @@ namespace Proiect_ip.Pages.Admin
 
             try
             {
-                await _pointsService.ModifyPointsAsync(user.Id, Points);
+                pctModif = await _pointsService.ModifyPointsAsync(user.Id, Points);
             }
             catch(InvalidOperationException)
             {
@@ -41,7 +43,7 @@ namespace Proiect_ip.Pages.Admin
                 return Page();
             }
             
-            Message = $"Am modificat cu {Points} puncte contul!";
+            Message = $"Am modificat cu {pctModif} puncte contul!";
             return Page();
         }
     }

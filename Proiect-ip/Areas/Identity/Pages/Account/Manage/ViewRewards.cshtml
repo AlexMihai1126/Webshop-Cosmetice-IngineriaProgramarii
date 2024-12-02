@@ -13,13 +13,13 @@
         <h3>Recompense</h3>
     </div>
     <div class="card-body">
-        @if (Model.Points != 0)
+        @if (Model.Message != null)
+        {
+            <p>@Model.Message</p>
+        }
+        else if (Model.Points >= 0)
         {
             <p>Ai <strong>@Model.Points</strong> puncte.</p>
-        }
-        else
-        {
-            <p>Eroare la incarcarea punctelor. Va rugam sa reincercati.</p>
         }
     </div>
 </div>
