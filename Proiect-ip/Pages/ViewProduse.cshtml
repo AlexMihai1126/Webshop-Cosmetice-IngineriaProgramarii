@@ -59,13 +59,19 @@
         }
         else
         {
-            
+
             @foreach (var produs in Model.Produs)
             {
                 var imageSrc = await ImageConverter.GetImageSrcAsync(produs.IdProdus);
                 <div class="col-md-3 col-sm-6 mb-4">
                     <div class="card h-100 shadow-sm">
-                        <img src="@imageSrc" class="img-fluid" alt="Imagine produs">
+                        @if (!string.IsNullOrEmpty(imageSrc))
+                        {
+                            <img src="@imageSrc" class="img-fluid" alt="Imagine produs">
+                        }
+                        else {
+                            <img src="shared/media/placeholder.png" class="img-fluid" alt="placeholder" />
+                        }
                         <div class="card-body">
                             <h4 class="card-title"><strong>@produs.Nume</strong></h4>
                             <h6 class="card-text"><strong>Brand: </strong>@produs.Brand.NumeBrand</h6>
