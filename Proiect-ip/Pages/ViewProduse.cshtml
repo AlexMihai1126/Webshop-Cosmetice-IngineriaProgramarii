@@ -1,0 +1,133 @@
+﻿@page
+@model Proiect_ip.Pages.ViewProduseModel
+@{
+    ViewData["Title"] = "Produse";
+    string categorieView = string.IsNullOrEmpty(Model.Categorie) ? new string("Toate produsele") : char.ToUpper(Model.Categorie[0]) + Model.Categorie.Substring(1).ToLower();
+}
+<div class="container-fluid mx-auto">
+    <h1 class="text-center my-4">@categorieView</h1>
+    <div class="accordion mb-4" id="filtrari-meniu">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#filtrari-meniu-data" aria-expanded="true" aria-controls="filtrari-meniu-data">
+                    Filtrare produse
+                </button>
+            </h2>
+            <div id="filtrari-meniu-data" class="accordion-collapse collapse" data-bs-parent="#filtrari-meniu">
+                <div class="accordion-body">
+                    <form method="get">
+                        <input type="hidden" name="categorie" value="@Model.Categorie" />
+                        <div class="mb-3">
+                            <label for="brand" class="form-label">Brand:</label>
+                            <input type="text" class="form-control" id="brand" name="Brand" value="@Model.Brand">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nume" class="form-label">Nume:</label>
+                            <input type="text" class="form-control" id="nume" name="Model" value="@Model.Nume">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="pretMin" class="form-label">Preț Minim:</label>
+                            <input type="number" class="form-control" id="pretMin" name="PretMin" value="@Model.PretMin">
+                        </div>
+                        <div class="mb-3">
+                            <label for="pretMax" class="form-label">Preț Maxim:</label>
+                            <input type="number" class="form-control" id="pretMax" name="PretMax" value="@Model.PretMax">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Filtrează</button>
+                    </form>
+                    <form method="post" asp-page-handler="ResetFilters">
+                        <input type="hidden" name="Categorie" value="@Model.Categorie" />
+                        <button type="submit" class="btn btn-secondary w-100">Resetează filtrele</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <div class="row mt-4">
+        @if (Model.Produs.Count() == 0)
+        {
+            <div class="<div class=" col-md-3 col-sm-6 mb-4">
+                <div class="alert alert-danger mx-auto role="alert">
+                    Nu s-au găsit produse.
+                </div>
+            </div>
+
+        }
+        else
+        {
+            @foreach (var produs in Model.Produs)
+            {
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+
+                        <div class="card-body">
+                            <h4 class="card-title"><strong>@produs.Nume</strong></h4>
+                            <h6 class="card-text"><strong>Brand: </strong>@produs.Brand.NumeBrand</h6>
+                            <hr />
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><p class="card-text"><strong>Preț: </strong> @(produs.Pret) RON</p></li>
+                                <li class="list-group-item">
+                                    <p>
+                                        Disponibilitate:
+                                        <strong>
+                                            @if (produs.Stoc > 0)
+                                            {
+                                                <span class="text-success">În stoc</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">Nu este pe stoc</span>
+                                            }
+                                        </strong>
+                                    </p>
+                                </li>
+                            </ul>
+
+                            <div class="accordion" id="@($"prodDesc{produs.IdProdus}")">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@($"prodDescExpand{produs.IdProdus}")" aria-expanded="true" aria-controls="@($"prodDescExpand{produs.IdProdus}")">
+                                            Detalii produs
+                                        </button>
+                                    </h2>
+
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="d-flex justify-content-center">
+                                <div class="btn-group" role="group">
+                                    <a href="/ViewProdus/?id=@produs.IdProdus" class="btn btn-secondary">Vezi detalii <i class="bi bi-arrow-up-right-square"></i></a>
+                                    <button onclick="if (@produs.Stoc > 0) { addToCart(@produs.IdProdus); }" class="btn btn-info" @(produs.Stoc == 0 ? "disabled" : "")>
+                                        Adaugă în coș <i class="bi bi-bag-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+    <!-- Butoanele de navigare între pagini -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                    <a class="page-link" href="@Url.Page("/ViewProduse", new { PageIndex = i, categorie = Model.Categorie, Brand = Model.Brand, Nume = Model.Nume, PretMin = Model.PretMin, PretMax = Model.PretMax})">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/addToCart.js"></script>
+}
