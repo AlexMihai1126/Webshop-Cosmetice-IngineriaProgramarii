@@ -1,5 +1,6 @@
 ﻿@page
 @model Proiect_ip.Pages.ViewProduseModel
+@inject Proiect_ip.Services.ImageConverter ImageConverter
 @{
     ViewData["Title"] = "Produse";
     string categorieView = string.IsNullOrEmpty(Model.Categorie) ? new string("Toate produsele") : char.ToUpper(Model.Categorie[0]) + Model.Categorie.Substring(1).ToLower();
@@ -51,25 +52,26 @@
     <div class="row mt-4">
         @if (Model.Produs.Count() == 0)
         {
-            <div class="<div class=" col-md-3 col-sm-6 mb-4">
-                <div class="alert alert-danger mx-auto role="alert">
-                    Nu s-au găsit produse.
-                </div>
+            <div class="alert alert-danger mx-auto" role="alert">
+                Nu s-au găsit produse.
             </div>
 
         }
         else
         {
+
             @foreach (var produs in Model.Produs)
             {
+                var imageSrc = await ImageConverter.GetImageSrcAsync(produs.IdProdus);
                 <div class="col-md-3 col-sm-6 mb-4">
                     <div class="card h-100 shadow-sm">
-                        @if (produs.ImageData != null && produs.ImageData.Length > 0)
+                        @if (!string.IsNullOrEmpty(imageSrc))
                         {
-                            var imageBase64 = Convert.ToBase64String(produs.ImageData); var imageSrc = $"data:{produs.ImageType};base64,{imageBase64}";
                             <img src="@imageSrc" class="img-fluid" alt="Imagine produs">
                         }
-
+                        else {
+                            <img src="shared/media/placeholder.png" class="img-fluid" alt="placeholder" />
+                        }
                         <div class="card-body">
                             <h4 class="card-title"><strong>@produs.Nume</strong></h4>
                             <h6 class="card-text"><strong>Brand: </strong>@produs.Brand.NumeBrand</h6>
