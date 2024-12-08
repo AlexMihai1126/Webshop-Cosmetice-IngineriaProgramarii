@@ -46,3 +46,13 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.navbar .dropdown-menu {
+    background-color: #f8f9fa; /* Fundal deschis */
+    border: 1px solid #ddd; /* Margine subtilă */
+}
+
+.navbar .dropdown-item:hover {
+    background-color: #e2e6ea; /* Fundal pe hover */
+    color: #000; /* Text pe hover */
+}

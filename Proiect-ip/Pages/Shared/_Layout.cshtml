@@ -25,7 +25,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="produseDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Produse
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="produseDropdown">
+                                <li><a class="dropdown-item" href="/produse?categorie=parfumuri">Parfumuri</a></li>
+                                <li><a class="dropdown-item" href="/produse?categorie=machiaj">Machiaj</a></li>
+                                <li><a class="dropdown-item" href="/produse?categorie=ingrijire-ten">Îngrijire Ten</a></li>
+                                <li><a class="dropdown-item" href="/produse?categorie=baie-corp">Baie & Corp</a></li>
+                                <li><a class="dropdown-item" href="/produse?categorie=par">Păr</a></li>
+                            </ul>
+                        </li>
+
                         <li class="nav-item flex-grow-1">
                             <form method="get" action="/RezultateCautare" class="d-flex">
                                 <div class="input-group">
