@@ -64,6 +64,11 @@
             {
                 <div class="col-md-3 col-sm-6 mb-4">
                     <div class="card h-100 shadow-sm">
+                        @if (produs.ImageData != null && produs.ImageData.Length > 0)
+                        {
+                            var imageBase64 = Convert.ToBase64String(produs.ImageData); var imageSrc = $"data:{produs.ImageType};base64,{imageBase64}";
+                            <img src="@imageSrc" class="img-fluid" alt="Imagine produs">
+                        }
 
                         <div class="card-body">
                             <h4 class="card-title"><strong>@produs.Nume</strong></h4>

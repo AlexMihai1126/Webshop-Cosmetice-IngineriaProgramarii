@@ -52,6 +52,7 @@ namespace Proiect_ip.Pages
 
             IQueryable<Produs> query = _context.Produse.Include(p => p.Categorie).Include(p => p.Brand);
 
+
             if (!string.IsNullOrEmpty(Categorie))
             {
                 string categorieLower = Categorie.ToLower();
