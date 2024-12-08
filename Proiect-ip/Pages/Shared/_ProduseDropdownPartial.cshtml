@@ -1,0 +1,13 @@
+﻿@using Proiect_ip.Services.DataCache
+@inject CategoriiPartialService CategoriiCache
+@{
+    var categorii = await CategoriiCache.GetCategoriiAsync();
+}
+
+<ul class="dropdown-menu" aria-labelledby="produseDropdown">
+    <li><a class="dropdown-item" asp-page="/Produse">Toate produsele</a></li>
+    @foreach (var categorie in categorii)
+    {
+        <li><a class="dropdown-item" asp-page="/Produse" asp-route-CategorieId=@categorie.Id>@categorie.NumeCateg</a></li>
+    }
+</ul>
