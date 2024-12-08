@@ -93,16 +93,6 @@
                                 </li>
                             </ul>
 
-                            <div class="accordion" id="@($"prodDesc{produs.IdProdus}")">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@($"prodDescExpand{produs.IdProdus}")" aria-expanded="true" aria-controls="@($"prodDescExpand{produs.IdProdus}")">
-                                            Detalii produs
-                                        </button>
-                                    </h2>
-
-                                </div>
-                            </div>
                             <hr />
                             <div class="d-flex justify-content-center">
                                 <div class="btn-group" role="group">
@@ -132,7 +122,3 @@
     </nav>
 
 </div>
-
-@section Scripts {
-    <script src="~/js/addToCart.js"></script>
-}

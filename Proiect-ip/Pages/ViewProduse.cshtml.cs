@@ -11,7 +11,6 @@ namespace Proiect_ip.Pages
     public class ViewProduseModel : PageModel
     {
         private readonly Proiect_ipContext _context;
-        private readonly ShoppingCartService _shoppingCartService;
 
 
         public IList<Produs> Produse { get; set; }
@@ -38,10 +37,9 @@ namespace Proiect_ip.Pages
         [BindProperty(SupportsGet = true)]
         public decimal? PretMax { get; set; }
 
-        public ViewProduseModel(Proiect_ipContext context, ShoppingCartService shoppingCartService)
+        public ViewProduseModel(Proiect_ipContext context)
         {
             _context = context;
-            _shoppingCartService = shoppingCartService;
         }
 
         public IList<Produs> Produs { get; set; }
