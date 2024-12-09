@@ -1,5 +1,6 @@
 ﻿@page
 @model Proiect_ip.Pages.ViewProdusModel
+@inject Proiect_ip.Services.ImageConverter ImageConverter
 @{
     ViewData["Title"] = "Detalii produs";
 }
@@ -8,7 +9,7 @@
     <h2 class="text-center mb-5">Vizualizare produs @Model.Produs.Nume</h2>
     <hr />
     <div class="d-grid gap-2 mb-4">
-        <a href="/ViewProduse" class="btn btn-secondary w-100">Înapoi <i class="bi bi-arrow-left-square"></i></a>
+        <a href="/Produse" class="btn btn-secondary w-100">Înapoi <i class="bi bi-arrow-left-square"></i></a>
     </div>
 
     <hr />
@@ -17,15 +18,16 @@
     <div class="row align-items-center">
         <!-- Coloană pentru imagine -->
         <div class="col-md-4 text-center">
-            @if (Model.Produs.ImageData != null && Model.Produs.ImageData.Length > 0)
-            {
-                var imageBase64 = Convert.ToBase64String(Model.Produs.ImageData);
-                var imageSrc = $"data:{Model.Produs.ImageType};base64,{imageBase64}";
-                <img src="@imageSrc" class="img-fluid rounded mb-4" alt="Imagine produs">
-            }
-            else
-            {
-                <p class="text-muted">Imaginea nu este disponibilă.</p>
+            @{
+                var imageSrc = await ImageConverter.GetImageSrcAsync(Model.Produs.IdProdus);
+                @if (!string.IsNullOrEmpty(imageSrc))
+                {
+                    <img src="@imageSrc" class="img-fluid" alt="Imagine produs">
+                }
+                else
+                {
+                    <img src="shared/media/placeholder.png" class="img-fluid" alt="placeholder" />
+                }
             }
         </div>
 

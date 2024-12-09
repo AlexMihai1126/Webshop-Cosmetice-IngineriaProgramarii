@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Proiect_ip.Areas.Identity.Data;
-using Proiect_ip.Services;
+using Proiect_ip.Services.DataCache;
 
 namespace Proiect_ip.Areas.Identity.Pages.Account.Manage
 {

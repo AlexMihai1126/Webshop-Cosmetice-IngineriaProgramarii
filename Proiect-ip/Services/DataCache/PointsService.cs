@@ -3,7 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Proiect_ip.Data;
 using Proiect_ip.Models;
 
-namespace Proiect_ip.Services
+namespace Proiect_ip.Services.DataCache
 {
     public class PointsService
     {

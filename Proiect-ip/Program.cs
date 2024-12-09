@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Proiect_ip.Data;
 using Proiect_ip.Areas.Identity.Data;
 using Proiect_ip.Services;
+using Proiect_ip.Services.DataCache;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Proiect_ipContextConnection") ?? throw new InvalidOperationException("Connection string 'Proiect_ipContextConnection' not found.");
 
@@ -19,6 +20,7 @@ builder.Services.AddScoped<PointsService>();
 builder.Services.AddScoped<ProductSearchService>();
 builder.Services.AddScoped<ShoppingCartService>();
 builder.Services.AddScoped<ImageConverter>();
+builder.Services.AddScoped<CategoriiPartialService>();
 
 
 builder.Services.ConfigureApplicationCookie(options =>

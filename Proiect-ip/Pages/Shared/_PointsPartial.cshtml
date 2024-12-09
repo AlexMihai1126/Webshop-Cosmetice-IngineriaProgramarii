@@ -1,7 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Proiect_ip.Areas.Identity.Data
+@using Proiect_ip.Services.DataCache
 @inject UserManager<Proiect_ipUser> UserManager
-@inject Proiect_ip.Services.PointsService PointsService
+@inject PointsService PointsService
 
 @{
     var user = await UserManager.GetUserAsync(User);
