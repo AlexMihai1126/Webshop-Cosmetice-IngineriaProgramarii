@@ -1,0 +1,59 @@
+﻿@page
+@model Proiect_ip.Pages.ConfirmPlataModel
+@{
+    ViewData["Title"] = "Confirmare procesare comandă";
+}
+
+<style>
+    .confirmation-container {
+        font-family: Arial, sans-serif;
+        margin: 20px auto;
+        max-width: 600px;
+        line-height: 1.6;
+        text-align: center;
+    }
+
+        .confirmation-container h2 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .confirmation-container p {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .confirmation-container .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            margin-top: 10px;
+            color: #fff;
+            text-decoration: none;
+            background-color: #28a745;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+            .confirmation-container .btn:hover {
+                background-color: #218838;
+            }
+</style>
+
+
+<div class="confirmation-container">
+    <h2>@ViewData["Title"]</h2>
+
+    @if (Model.Status == "Success")
+    {
+        <p>Comanda a fost procesată cu succes!</p>
+        <p>Vă mulțumim pentru achiziția dumneavoastră!</p>
+        <a href="/Produse" class="btn">Continuă cumpărăturile</a>
+        <a href="/" class="btn">Înapoi la Magazin</a>
+    }
+    else
+    {
+        <p>Comanda nu a putut fi procesată. Vă rugăm să încercați din nou sau să anulați comanda.</p>
+        <a href="/Cos" class="btn">Reîncepe procesul de achiziționare</a>
+    }
+</div>
