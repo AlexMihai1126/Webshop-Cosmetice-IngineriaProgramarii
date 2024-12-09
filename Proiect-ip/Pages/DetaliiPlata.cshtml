@@ -139,6 +139,16 @@
     function toggleCardFields() {
         const metodaPlata = document.getElementById("MetodaPlata").value;
         const cardFields = document.getElementById("CardFields");
-        cardFields.style.display = metodaPlata === "Card" ? "block" : "none";
+        if (metodaPlata === "Numerar") {
+            cardFields.style.display = "none";
+            document.getElementById("NumarCard").required = false;
+            document.getElementById("CVC").required = false;
+            document.getElementById("DataExpirare").required = false;
+        } else {
+            cardFields.style.display = "block";
+            document.getElementById("NumarCard").required = true;
+            document.getElementById("CVC").required = true;
+            document.getElementById("DataExpirare").required = true;
+        }
     }
 </script>
