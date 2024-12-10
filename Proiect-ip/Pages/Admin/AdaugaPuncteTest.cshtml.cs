@@ -6,23 +6,21 @@ using Proiect_ip.Services.DataCache;
 
 namespace Proiect_ip.Pages.Admin
 {
-    public class AdaugaPuncteTestModel : PageModel
+    public class AdaugaPuncteTestModel(UserManager<Proiect_ipUser> userManager, PointsService pointsService) : PageModel
     {
-        private readonly UserManager<Proiect_ipUser> _userManager;
-        private readonly PointsService _pointsService;
-
-        public AdaugaPuncteTestModel(UserManager<Proiect_ipUser> userManager, PointsService pointsService)
-        {
-            _userManager = userManager;
-            _pointsService = pointsService;
-        }
+        private readonly UserManager<Proiect_ipUser> _userManager = userManager;
+        private readonly PointsService _pointsService = pointsService;
 
         [BindProperty]
-        public int Points { get; set; }
+        public int PctDeModificat { get; set; }
+        [BindProperty]
+        public string? Motiv { get; set; }
+        [BindProperty]
+        public int? IdCom { get; set; }
 
         public string? Message { get; set; }
 
-        private int pctModif {  get; set; }
+        private int PctModif {  get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -35,7 +33,7 @@ namespace Proiect_ip.Pages.Admin
 
             try
             {
-                pctModif = await _pointsService.ModifyPointsAsync(user.Id, Points);
+                PctModif = await _pointsService.ModifyPointsAsync(user.Id, PctDeModificat, Motiv, IdCom);
             }
             catch(InvalidOperationException)
             {
@@ -43,7 +41,7 @@ namespace Proiect_ip.Pages.Admin
                 return Page();
             }
             
-            Message = $"Am modificat cu {pctModif} puncte contul!";
+            Message = $"Am modificat cu {PctModif} puncte contul!";
             return Page();
         }
     }

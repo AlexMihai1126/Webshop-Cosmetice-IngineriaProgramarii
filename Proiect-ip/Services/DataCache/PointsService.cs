@@ -39,29 +39,35 @@ namespace Proiect_ip.Services.DataCache
             return pctTotal;
         }
 
-        public async Task<int> ModifyPointsAsync(string userId, int nrPuncteAdaugat)
+        public async Task<int> ModifyPointsAsync(string userId, int nrPuncteModificat, string? motiv, int? IdComanda)
         {
             int nrPctCurent = await GetPointsAsync(userId);
+            if(nrPuncteModificat == 0)
+            {
+                throw new InvalidOperationException("Cannot add 0 points.");
+            }
 
-            if (nrPctCurent + nrPuncteAdaugat < 0)
+            if (nrPctCurent + nrPuncteModificat < 0)
             {
                 throw new InvalidOperationException("Cannot deduct points. The operation would result in negative points.");
             }
 
-            nrPuncteAdaugat = nrPuncteAdaugat > POINTS_CAP ? POINTS_CAP : nrPuncteAdaugat;
+            nrPuncteModificat = nrPuncteModificat > POINTS_CAP ? POINTS_CAP : nrPuncteModificat;
 
             var pctNoi = new IstoricPuncte
             {
                 Proiect_ipUserID = userId,
-                Puncte = nrPuncteAdaugat,
-                DataAdaugare = DateTime.UtcNow
+                Puncte = nrPuncteModificat,
+                DataAdaugare = DateTime.UtcNow,
+                Motiv = motiv,
+                IdComanda = IdComanda
             };
 
             _context.IstoricPuncte.Add(pctNoi);
             await _context.SaveChangesAsync();
             await CacheUserPointsAsync(userId);
 
-            return nrPuncteAdaugat;
+            return nrPuncteModificat;
         }
     }
 

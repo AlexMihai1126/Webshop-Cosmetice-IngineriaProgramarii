@@ -12,8 +12,16 @@
     <h2 class="text-center">Adauga sau scade puncte utilizatorului logat</h2>
     <form method="post">
         <div class="mb-3">
-            <label for="points" class="form-label">Numar de puncte de adaugat</label>
-            <input type="number" class="form-control" id="points" asp-for="Points" required>
+            <label for="points" class="form-label">Numar de puncte de modificat</label>
+            <input type="number" class="form-control" id="points" asp-for="PctDeModificat" required>
+        </div>
+        <div class="mb-3">
+            <label for="points" class="form-label">Motiv schimbare?</label>
+            <input type="text" class="form-control" id="motiv" asp-for="Motiv">
+        </div>
+        <div class="mb-3">
+            <label for="points" class="form-label">Id comanda?</label>
+            <input type="number" class="form-control" id="idcomanda" asp-for="IdCom">
         </div>
         <button type="submit" class="btn btn-primary">Modifica</button>
     </form>
