@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Proiect_ip.Areas.Identity.Data
+@using Proiect_ip.Services
 @inject UserManager<Proiect_ipUser> UserManager
+@inject ShoppingCartService CartService
 
 @{
     var user = await UserManager.GetUserAsync(User);
@@ -10,7 +12,14 @@
 {
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link text-dark">Cos cumparaturi</a>
+            <a class="nav-link text-dark" asp-page="/Cos">Cos cumparaturi</a>
+            @{
+                var (suma, nrprod) = await CartService.GetCartDataAsync(user.Id);
+                if(suma != 0 || nrprod !=0){
+                    <p>Total: @suma</p>
+                    <p>Produse: @nrprod</p>
+                }
+            }
         </li>
     </ul>
 }
