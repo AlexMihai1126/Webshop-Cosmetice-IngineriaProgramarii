@@ -1,0 +1,61 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.CodeAnalysis;
+using Proiect_ip.Areas.Identity.Data;
+using Proiect_ip.Models;
+using Proiect_ip.Services;
+
+namespace Proiect_ip.Pages
+{
+    [Authorize]
+    public class CosModel(UserManager<Proiect_ipUser> userManager, ShoppingCartService cartService) : PageModel
+    {
+        public List<(int ProductId, int Cantitate)> Produse {  get; set; }
+        public async Task<IActionResult> OnGetAsync()
+        {
+            var user = await userManager.GetUserAsync(User);
+            var userId = user.Id;
+            Produse = await cartService.GetProductsAsync(userId);
+            return Page();
+        }
+        public async Task<IActionResult> OnPostRemoveFromCartAsync(int productId)
+        {
+            var user = await userManager.GetUserAsync(User);
+            var userId = user.Id;
+            await cartService.RemoveFromCartAsync(userId, productId);
+            return RedirectToPage();
+        }
+
+        public async Task <IActionResult> OnPostCreateOrderAsync()
+        {
+            var user = await userManager.GetUserAsync(User);
+            var userId = user.Id;
+            await cartService.PlaceOrderAsync(userId);
+            return RedirectToPage();
+        }
+        public async Task<IActionResult> OnPostUpdateQuantityAsync(int productId, int cantitate)
+        {
+            if (cantitate <= 0)
+            {
+                return Page();
+            }
+            var user = await userManager.GetUserAsync(User);
+            try
+            {
+                await cartService.UpdateCartItemAsync(user.Id, productId, cantitate);
+                TempData["SuccessMessage"] = "Am actualizat cantitatea.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Eroare la actualizare cantitate: {ex.Message}";
+            }
+
+            return RedirectToPage();
+        }
+
+
+    }
+
+}

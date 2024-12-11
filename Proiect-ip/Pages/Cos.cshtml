@@ -1,0 +1,54 @@
+﻿@page
+@model Proiect_ip.Pages.CosModel
+@{
+    ViewData["Title"] = "Cosul de cumparaturi";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Cosul de cumparaturi</h1>
+    @if (Model.Produse.Count == 0)
+    {
+        <p class="text-muted">Cosul este gol.</p>
+    }
+    else
+    {
+        if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+
+        if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+
+        <div class="row">
+            @foreach (var item in Model.Produse)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">ID produs: @item.ProductId</h5>
+                            <p class="card-text">Cantitate: @item.Cantitate</p>
+                            <div class="d-grid gap-2">
+                                <a asp-page="/DetaliiProdus" asp-route-id="@item.ProductId" class="btn btn-primary">Detalii</a>
+                                <form method="post" asp-page-handler="RemoveFromCart" asp-route-productId="@item.ProductId">
+                                    <button type="submit" class="btn btn-danger">Sterge</button>
+                                </form>
+                                <form method="post" asp-page-handler="UpdateQuantity" asp-route-productId="@item.ProductId">
+                                    <div class="input-group">
+                                        <input type="number" name="cantitate" value="@item.Cantitate" class="form-control" min="1" required />
+                                        <button type="submit" class="btn btn-primary">Actualizeaza</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <form method="post" asp-page-handler="CreateOrder">
+            <button type="submit" class="btn btn-info">Trimite comanda</button>
+        </form>
+    }
+</div>

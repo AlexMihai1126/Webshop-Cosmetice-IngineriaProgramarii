@@ -4,6 +4,7 @@ using Proiect_ip.Data;
 using Proiect_ip.Areas.Identity.Data;
 using Proiect_ip.Services;
 using Proiect_ip.Services.DataCache;
+using static System.Formats.Asn1.AsnWriter;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Proiect_ipContextConnection") ?? throw new InvalidOperationException("Connection string 'Proiect_ipContextConnection' not found.");
 
@@ -32,11 +33,12 @@ builder.Services.ConfigureApplicationCookie(options =>
         {
             using var scope = context.HttpContext.RequestServices.CreateScope();
             var pointsService = scope.ServiceProvider.GetRequiredService<PointsService>();
+            var cartService = scope.ServiceProvider.GetRequiredService<ShoppingCartService>();
             await pointsService.CacheUserPointsAsync(userId);
+            await cartService.CreateCartAsync(userId);
         }
     };
 });
-
 
 var app = builder.Build();
 

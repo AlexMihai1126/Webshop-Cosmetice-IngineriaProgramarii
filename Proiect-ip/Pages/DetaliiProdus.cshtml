@@ -61,9 +61,12 @@
             </ul>
             <h4 class="mt-3">Preț: <strong>@Model.Produs.Pret LEI</strong></h4>
             <div class="d-grid gap-2 mt-4">
-                <button onclick="if (@Model.Produs.Stoc > 0) { addToCart(@Model.Produs.IdProdus); }" class="btn btn-info" @(Model.Produs.Stoc == 0 ? "disabled" : "")>
-                    Adaugă în coș <i class="bi bi-bag-plus"></i>
-                </button>
+                <form method="post" asp-page-handler="AddToCart" asp-route-id="@Model.Produs.IdProdus">
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="btn btn-info" @(Model.Produs.Stoc == 0 ? "disabled" : "")>
+                        Adaugă în coș <i class="bi bi-bag-plus"></i>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
