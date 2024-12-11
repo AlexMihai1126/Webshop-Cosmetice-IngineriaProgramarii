@@ -120,7 +120,7 @@ namespace Proiect_ip.Services
                 throw new InvalidOperationException("Cosul este gol.");
             }
 
-            // 1. Verifica stocul pentru toate produsele din cos
+            // 1. Verifica stocul pentru toate produsele din cos si scoate din stoc
             foreach (var item in cosUtilizator)
             {
                 var produs = await _context.Produse.FindAsync(item.IdProdusCos);
@@ -128,19 +128,13 @@ namespace Proiect_ip.Services
                 {
                     throw new InvalidOperationException($"Stoc insuficient pentru produsul cu ID {item.IdProdusCos}.");
                 }
-            }
-
-            // 2. Scoate din stoc produsele cerute de utilizator
-            foreach (var item in cosUtilizator)
-            {
-                var produs = await _context.Produse.FindAsync(item.IdProdusCos);
                 produs.Stoc -= item.CantitateInCos;
             }
 
             // Salvam datele ca sa ne asiguram ca un alt user nu poate cumpara mai mult decat mai avem ramas
             await _context.SaveChangesAsync();
 
-            // 3. Creare comanda
+            // 2. Creare comanda
             var total = cosUtilizator.Sum(c => c.CantitateInCos * c.PretPerUnitate);
             var comandaNoua = new Comanda
             {
@@ -154,7 +148,7 @@ namespace Proiect_ip.Services
             _context.Comenzi.Add(comandaNoua);
             await _context.SaveChangesAsync();
 
-            // 4. Adaugare asociere produse cumparate cu comanda noua in tabelul de legatura
+            // 3. Adaugare asociere produse cumparate cu comanda noua in tabelul de legatura
             foreach (var item in cosUtilizator)
             {
                 _context.ComandaProduse.Add(new ComandaProdus
@@ -168,11 +162,11 @@ namespace Proiect_ip.Services
 
             await _context.SaveChangesAsync();
 
-            // 5. Acorda puncte aferente comenzii
+            // 4. Acorda puncte aferente comenzii
             string Motiv = $"Comanda {comandaNoua.IdComanda}";
             await _pointsService.ModifyPointsAsync(userId, comandaNoua.PuncteGenerate, Motiv, comandaNoua.IdComanda);
 
-            // 6. Goleste cosul
+            // 5. Goleste cosul
             _memoryCache.Remove(userId);
         } //Functia de trimitere a comenzii
 
