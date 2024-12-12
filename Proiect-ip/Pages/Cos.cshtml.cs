@@ -3,21 +3,33 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Proiect_ip.Areas.Identity.Data;
+using Proiect_ip.Data;
 using Proiect_ip.Models;
 using Proiect_ip.Services;
 
 namespace Proiect_ip.Pages
 {
     [Authorize]
-    public class CosModel(UserManager<Proiect_ipUser> userManager, ShoppingCartService cartService) : PageModel
+    public class CosModel(UserManager<Proiect_ipUser> userManager, ShoppingCartService cartService, Proiect_ipContext context) : PageModel
     {
         public List<(int ProductId, int Cantitate)> Produse {  get; set; }
+        public List<Produs> ProduseCos { get; set; } = [];
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await userManager.GetUserAsync(User);
             var userId = user.Id;
             Produse = await cartService.GetProductsAsync(userId);
+            foreach (var product in Produse)
+            {
+                var produsNou = await context.Produse
+                 .Include(p => p.Categorie)
+                 .Include(p => p.Brand)
+                 .FirstOrDefaultAsync(p => p.IdProdus == product.ProductId);
+
+                ProduseCos.Add(produsNou);
+            }
             return Page();
         }
         public async Task<IActionResult> OnPostRemoveFromCartAsync(int productId)
