@@ -1,23 +1,81 @@
 ﻿@page
+@inject Proiect_ip.Services.ImageConverter ImageConverter
 @model Proiect_ip.Pages.RezultateCautareModel
 @{
     ViewData["Title"] = "Rezultate cautare";
 }
 
-@if (Model.Produse != null && Model.Produse.Count > 0)
-{
-    <div>
-        @foreach (var produs in Model.Produse)
+<div class="container-fluid mx-auto">
+    <h1 class="text-center my-4">Rezultate căutare pentru '@Model.SearchQuery'</h1>
+
+    <div class="row mt-4">
+        @if (Model.Produse != null && Model.Produse.Count > 0)
         {
-            <div class="product-item">
-                <h5>@produs.Nume</h5>
-                <p>@produs.Descriere</p>
-                <p>Pret: @(produs.Pret) RON</p>
+            @foreach (var produs in Model.Produse)
+            {
+                var imageSrc = await ImageConverter.GetImageSrcAsync(produs.IdProdus);
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        @if (!string.IsNullOrEmpty(imageSrc))
+                        {
+                            <img src="@imageSrc" class="img-fluid" alt="Imagine produs">
+                        }
+                        else
+                        {
+                            <img src="shared/media/placeholder.png" class="img-fluid" alt="placeholder" />
+                        }
+                        <div class="card-body">
+                            <h4 class="card-title"><strong>@produs.Nume</strong></h4>
+                            <h6 class="card-text"><strong>Brand: </strong>@produs.Brand.NumeBrand</h6>
+                            <hr />
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><p class="card-text"><strong>Preț: </strong> @(produs.Pret) RON</p></li>
+                                <li class="list-group-item">
+                                    <p>
+                                        Disponibilitate:
+                                        <strong>
+                                            @if (produs.Stoc > 0)
+                                            {
+                                                <span class="text-success">În stoc</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">Nu este pe stoc</span>
+                                            }
+                                        </strong>
+                                    </p>
+                                </li>
+                            </ul>
+
+                            <hr />
+                            <div class="d-flex justify-content-center">
+                                <div class="btn-group" role="group">
+                                    <a href="/DetaliiProdus/?id=@produs.IdProdus" class="btn btn-secondary">Vezi detalii <i class="bi bi-arrow-up-right-square"></i></a>
+                                    <button onclick="if (@produs.Stoc > 0) { addToCart(@produs.IdProdus); }" class="btn btn-info" @(produs.Stoc == 0 ? "disabled" : "")>
+                                        Adaugă în coș <i class="bi bi-bag-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-danger mx-auto" role="alert">
+                Nu s-au găsit produse.
             </div>
         }
     </div>
-}
-else
-{
-    <p>Nu am gasit produse.</p>
-}
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                    <a class="page-link" href="@Url.Page("/RezultateCautare", new { PageIndex = i, term = Model.SearchQuery, ItemsPerPage = Model.ItemsPerPage })">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

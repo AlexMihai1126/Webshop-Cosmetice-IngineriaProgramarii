@@ -13,8 +13,12 @@ namespace Proiect_ip.Services
 
         public async Task<List<Produs>> SearchBrandOrNameAsync(string searchTerm)
         {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                throw new ArgumentNullException(nameof(searchTerm));
+            }
             searchTerm = searchTerm.ToLower();
-            IQueryable<Produs> query = _context.Produse;
+            IQueryable<Produs> query = _context.Produse.Include(p => p.Categorie).Include(p => p.Brand);
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
