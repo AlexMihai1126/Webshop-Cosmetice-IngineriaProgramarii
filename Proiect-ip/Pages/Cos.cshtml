@@ -22,32 +22,39 @@
             <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
         }
 
-        <div class="row">
-            @foreach (var item in Model.ProduseCos)
-            {
-                var cantitate = Model.Produse.Find(p => p.ProductId == item.IdProdus).Cantitate;
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">@item.Nume</h5>
-                            <p class="card-text">Cantitate: @cantitate</p>
-                            <div class="d-grid gap-2">
-                                <a asp-page="/DetaliiProdus" asp-route-id="@item.IdProdus" class="btn btn-primary">Detalii</a>
-                                <form method="post" asp-page-handler="RemoveFromCart" asp-route-productId="@item.IdProdus">
-                                    <button type="submit" class="btn btn-danger">Sterge</button>
-                                </form>
-                                <form method="post" asp-page-handler="UpdateQuantity" asp-route-productId="@item.IdProdus">
-                                    <div class="input-group">
-                                        <input type="number" name="cantitate" value="@cantitate" class="form-control" min="1" required />
-                                        <button type="submit" class="btn btn-primary">Actualizeaza</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Produs</th>
+                    <th>Cantitate</th>
+                    <th>Actiuni</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ProduseCos)
+                {
+                    var cantitate = Model.Produse.Find(p => p.ProductId == item.IdProdus).Cantitate;
+                    <tr>
+                        <td>@item.Nume</td>
+                        <td>
+                            <form method="post" asp-page-handler="UpdateQuantity" asp-route-productId="@item.IdProdus" class="d-flex">
+                                <div class="input-group mb-3">
+                                    <input type="number" name="cantitate" value="@cantitate" class="form-control" min="1" required />
+                                    <button type="submit" class="btn btn-primary btn-sm">Actualizeaza</button>
+                                </div>
+                            </form>
+                        </td>
+                        <td>
+                            <a asp-page="/DetaliiProdus" asp-route-id="@item.IdProdus" class="btn btn-info me-2">Detalii</a>
+                            <form method="post" asp-page-handler="RemoveFromCart" asp-route-productId="@item.IdProdus" style="display:inline;">
+                                <button type="submit" class="btn btn-danger">Sterge</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
         <form method="post" asp-page-handler="CreateOrder">
             <button type="submit" class="btn btn-info">Trimite comanda</button>
         </form>
