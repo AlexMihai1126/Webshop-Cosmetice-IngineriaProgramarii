@@ -22,6 +22,7 @@ builder.Services.AddScoped<ProductSearchService>();
 builder.Services.AddScoped<ShoppingCartService>();
 builder.Services.AddScoped<ImageConverter>();
 builder.Services.AddScoped<CategoriiPartialService>();
+builder.Services.AddScoped<OrdersManagerService>();
 
 
 builder.Services.ConfigureApplicationCookie(options =>

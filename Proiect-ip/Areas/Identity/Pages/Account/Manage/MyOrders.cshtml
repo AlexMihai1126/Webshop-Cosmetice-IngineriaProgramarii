@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Comenzile mele";
     Layout = "~/Areas/Identity/Pages/Account/Manage/_Layout.cshtml";
+    int counter = 0;
 }
 
 <h2>Comenzile mele</h2>
@@ -25,20 +26,73 @@ else
                 </tr>
             </thead>
             <tbody>
-                @for (int i = 0; i < Model.Orders.Count; i++)
+                @foreach (var order in Model.Orders)
                 {
-                    var order = Model.Orders[i];
+                    counter += 1;
                     <tr>
-                        <td>@(i + 1)</td>
+                        <td>@counter</td>
                         <td>@order.DataComanda.ToShortDateString()</td>
                         <td>@order.Status</td>
                         <td>@order.PretTotal.ToString() Lei</td>
                         <td>
-                            <a asp-page="/Account/Manage/OrderDetails" asp-route-id="@order.IdComanda" class="btn btn-primary btn-sm">Vizualizare (TODO)</a>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-primary btn-sm border-0" data-bs-toggle="modal" data-bs-target="#orderDetailsModal-@order.IdComanda">Vizualizare</button>
+                                @if (order.Status == Proiect_ip.Models.Comanda.ComandaStatus.InProcesare)
+                                {
+                                    <form method="post" asp-page-handler="CancelOrder">
+                                        <input type="hidden" name="orderId" value="@order.IdComanda" />
+                                        <button type="submit" class="btn btn-outline-danger btn-sm border-0">Anulare</button>
+                                    </form>
+                                }
+                            </div>
+                            
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+    foreach(var order in Model.Orders){
+        <div class="modal fade" id="orderDetailsModal-@order.IdComanda" tabindex="-1" aria-labelledby="orderDetailsModalLabel-@order.IdComanda" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="orderDetailsModalLabel-@order.IdComanda">Detalii comanda</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Nume produs</th>
+                                        <th>Pret unitar</th>
+                                        <th>Cantitate</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    @foreach (var produsDinComanda in order.ComandaProduse)
+                                    {
+                                        <tr>
+                                        <td>@produsDinComanda.Produs.Nume</td>
+                                        <td>@produsDinComanda.Produs.Pret.ToString() Lei</td>
+                                        <td>@produsDinComanda.Cantitate</td>
+                                        <td>@(produsDinComanda.Produs.Pret * produsDinComanda.Cantitate)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <p>Pret total: @order.PretTotal</p>
+                            <p>Status: @order.Status</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Închide</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 }
