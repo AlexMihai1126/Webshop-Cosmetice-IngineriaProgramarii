@@ -7,13 +7,12 @@
 }
 <form method="get" asp-page="./Comenzi" class="mb-3">
     <div class="btn-group me-3" role="group" aria-label="Optiuni filtrare">
-        <input type="radio" class="btn-check" name="sortByLatest" id="latest" value="true" @(Model.sortByLatest ? "checked" : "")>
+        <input type="radio" class="btn-check" name="isLatest" id="latest" value="true" @(Model.sortByLatest ? "checked" : "")>
         <label class="btn btn-outline-primary" for="latest">Cele mai noi</label>
 
-        <input type="radio" class="btn-check" name="sortByLatest" id="oldest" value="false" @(!Model.sortByLatest ? "checked" : "")>
+        <input type="radio" class="btn-check" name="isLatest" id="oldest" value="false" @(!Model.sortByLatest ? "checked" : "")>
         <label class="btn btn-outline-primary" for="oldest">Cele mai vechi</label>
     </div>
-
     <div class="btn-group" role="group" aria-label="Status Filter">
         @foreach (var status in Enum.GetValues<Proiect_ip.Models.Comanda.ComandaStatus>())
         {

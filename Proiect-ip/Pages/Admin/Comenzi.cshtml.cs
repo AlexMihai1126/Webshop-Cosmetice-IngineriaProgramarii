@@ -14,12 +14,13 @@ namespace Proiect_ip.Pages.Admin
     {
         public List<Comanda> Orders { get; set; } = [];
         [BindProperty]
-        public bool sortByLatest { get; set; } = true;
+        public bool sortByLatest { get; set; }
         [BindProperty]
         public Comanda.ComandaStatus StatusFilter { get; set; }
-        public async Task<IActionResult> OnGetAsync(Comanda.ComandaStatus? statusFilter, bool sortByLatest = true)
+        public async Task<IActionResult> OnGetAsync(Comanda.ComandaStatus? statusFilter, bool isLatest = true)
         {
             StatusFilter = statusFilter ?? Comanda.ComandaStatus.Toate;
+            sortByLatest = isLatest;
 
             Orders = await ordersManager.GetAllOrdersAsync(StatusFilter, sortByLatest);
             return Page();
