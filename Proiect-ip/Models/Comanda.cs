@@ -6,6 +6,7 @@ namespace Proiect_ip.Models
     {
         public enum ComandaStatus
         {
+            Toate = 0,
             Anulat = 1,
             InProcesare = 2,
             Confirmata = 3,

@@ -7,37 +7,33 @@ using Proiect_ip.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Proiect_ip.Services;
 
 namespace Proiect_ip.Areas.Identity.Pages.Account.Manage
 {
-    public class MyOrdersModel : PageModel
+    public class MyOrdersModel(UserManager<Proiect_ipUser> userManager, OrdersManagerService ordersManager) : PageModel
     {
-        private readonly UserManager<Proiect_ipUser> _userManager;
-        private readonly Proiect_ipContext _context;
-
-        public MyOrdersModel(UserManager<Proiect_ipUser> userManager, Proiect_ipContext context)
-        {
-            _userManager = userManager;
-            _context = context;
-        }
-
-        public List<Comanda> Orders { get; set; } = new List<Comanda>();
+        public List<Comanda> Orders { get; set; } = [];
 
         public async Task<IActionResult> OnGetAsync()
         {
             ViewData["ActivePage"] = "MyOrders";
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
             {
                 return RedirectToPage("/Account/Login");
             }
 
-            Orders = _context.Comenzi
-                .Where(c => c.Proiect_ipUserID == user.Id)
-                .OrderByDescending(c => c.DataComanda)
-                .ToList();
+            Orders = await ordersManager.GetCustomerOrdersAsync(user.Id);
 
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostCancelOrderAsync(int orderId)
+        {
+            var currentUser = await userManager.GetUserAsync(User);
+            await ordersManager.CancelOrderAsync(orderId,currentUser.Id);
+            return RedirectToPage();
         }
     }
 }
