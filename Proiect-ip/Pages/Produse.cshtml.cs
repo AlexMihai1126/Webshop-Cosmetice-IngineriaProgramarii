@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.EntityFrameworkCore;
+using Proiect_ip.Areas.Identity.Data;
 using Proiect_ip.Data;
 using Proiect_ip.Models;
 using Proiect_ip.Services;
 
 namespace Proiect_ip.Pages
 {
-    public class ProduseModel(Proiect_ipContext context) : PageModel
+    public class ProduseModel(Proiect_ipContext context, UserManager<Proiect_ipUser> userManager, ShoppingCartService cartService) : PageModel
     {
-        private readonly Proiect_ipContext _context = context;
         [BindProperty(SupportsGet = true)]
         public int ItemsPerPage { get; } = 8;
         [BindProperty(SupportsGet = true)]
@@ -40,10 +41,10 @@ namespace Proiect_ip.Pages
         public decimal PretMinimDB { get; set; }
         public async Task OnGetAsync()
         {
-            PretMaximDB = await _context.Produse.MaxAsync(p => p.Pret);
-            PretMinimDB = await _context.Produse.MinAsync(p => p.Pret);
-            Branduri = await _context.Branduri.OrderBy(b => b.NumeBrand).ToListAsync();
-            Categorii = await _context.CategoriiProduse.OrderBy(c => c.NumeCateg).ToListAsync();
+            PretMaximDB = await context.Produse.MaxAsync(p => p.Pret);
+            PretMinimDB = await context.Produse.MinAsync(p => p.Pret);
+            Branduri = await context.Branduri.OrderBy(b => b.NumeBrand).ToListAsync();
+            Categorii = await context.CategoriiProduse.OrderBy(c => c.NumeCateg).ToListAsync();
 
             BranduriSelectList = Branduri
                 .Select(b => new SelectListItem
@@ -65,19 +66,19 @@ namespace Proiect_ip.Pages
                 .ToList();
             CategoriiSelectList.Insert(0, new SelectListItem { Text = "Nicio categorie selectata", Value = "0" });
 
-            IQueryable<Produs> query = _context.Produse.Include(p => p.Categorie).Include(p => p.Brand);
+            IQueryable<Produs> query = context.Produse.Include(p => p.Categorie).Include(p => p.Brand);
 
             if (CategorieId.HasValue && CategorieId.Value != 0)
             {
                 query = query.Where(p => p.IdCategorie == CategorieId.Value);
-                var categorie = await _context.CategoriiProduse.FindAsync(CategorieId);
+                var categorie = await context.CategoriiProduse.FindAsync(CategorieId);
                 NumeCategCurenta = categorie?.NumeCateg;
             }
 
             if (BrandId.HasValue && BrandId.Value != 0)
             {
                 query = query.Where(p => p.IdBrand == BrandId.Value);
-                var brand = await _context.Branduri.FindAsync(BrandId);
+                var brand = await context.Branduri.FindAsync(BrandId);
                 NumeBrandCurent = brand?.NumeBrand;
             }
 
@@ -106,6 +107,29 @@ namespace Proiect_ip.Pages
             PretMax = null;
 
             return Task.FromResult<IActionResult>(RedirectToPage());
+        }
+
+        public async Task<IActionResult> OnPostAddToCartAsync(int id, int quantity)
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                var returnUrl = Url.Page("Produse");
+                return RedirectToPage("/Account/Login", new { area = "Identity", ReturnUrl = returnUrl });
+            }
+
+            try
+            {
+                await cartService.AddToCartAsync(user.Id, id, quantity);
+
+                TempData["SuccessMessage"] = "Produsul a fost adăugat în coș!";
+                return RedirectToPage("/Cos");
+            }
+            catch (InvalidOperationException)
+            {
+                TempData["ErrorMessage"] = "Produsul nu poate fi adăugat în coș!";
+                return RedirectToPage("Produse");
+            }
         }
     }
 

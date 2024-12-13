@@ -1,9 +1,9 @@
 ﻿@page
 @model Proiect_ip.Pages.ProduseModel
-@inject Proiect_ip.Services.ImageConverter ImageConverter
 @{
     ViewData["Title"] = "Produse";
 }
+
 <script>
     function updatePretMin(value) {
         document.getElementById('pretMinValue').textContent = value;
@@ -13,6 +13,18 @@
         document.getElementById('pretMaxValue').textContent = value;
     }
 </script>
+
+@{
+    if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+}
 <div class="container-fluid mx-auto">
     @{
         string titlu = "Toate produsele";
@@ -105,16 +117,9 @@
 
             @foreach (var produs in Model.Produse)
             {
-                var imageSrc = await ImageConverter.GetImageSrcAsync(produs.IdProdus);
                 <div class="col-md-3 col-sm-6 mb-4">
                     <div class="card h-100 shadow-sm">
-                        @if (!string.IsNullOrEmpty(imageSrc))
-                        {
-                            <img src="@imageSrc" class="img-fluid" alt="Imagine produs">
-                        }
-                        else {
-                            <img src="shared/media/placeholder.png" class="img-fluid" alt="placeholder" />
-                        }
+                        @await Html.PartialAsync("_ImageView", (produs.IdProdus, CssClass: "img-fluid"))
                         <div class="card-body">
                             <h4 class="card-title"><strong>@produs.Nume</strong></h4>
                             <h6 class="card-text"><strong>Brand: </strong>@produs.Brand.NumeBrand</h6>
@@ -141,10 +146,19 @@
                             <hr />
                             <div class="d-flex justify-content-center">
                                 <div class="btn-group" role="group">
-                                    <a href="/DetaliiProdus/?id=@produs.IdProdus" class="btn btn-secondary">Vezi detalii <i class="bi bi-arrow-up-right-square"></i></a>
-                                    <button onclick="if (@produs.Stoc > 0) { addToCart(@produs.IdProdus); }" class="btn btn-info" @(produs.Stoc == 0 ? "disabled" : "")>
-                                        Adaugă în coș <i class="bi bi-bag-plus"></i>
-                                    </button>
+                                    <a class="btn btn-secondary" asp-page="/DetaliiProdus" asp-route-id="@produs.IdProdus">Vezi detalii <i class="bi bi-arrow-up-right-square"></i></a>
+                                    @if (produs.Stoc <= 0){
+                                        <button type="button" class="btn btn-secondary" disabled aria-disabled="true">
+                                            Nu este pe stoc
+                                        </button>
+                                    } else {
+                                        <form method="post" asp-page-handler="AddToCart" asp-route-id="@produs.IdProdus">
+                                            <input type="hidden" name="quantity" value="1" />
+                                            <button type="submit" class="btn btn-info">
+                                                Adaugă în coș <i class="bi bi-bag-plus"></i>
+                                            </button>
+                                        </form>
+                                    }
                                 </div>
                             </div>
                         </div>

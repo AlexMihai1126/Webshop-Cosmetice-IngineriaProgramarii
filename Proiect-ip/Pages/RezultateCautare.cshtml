@@ -1,5 +1,4 @@
 ﻿@page
-@inject Proiect_ip.Services.ImageConverter ImageConverter
 @model Proiect_ip.Pages.RezultateCautareModel
 @{
     ViewData["Title"] = "Rezultate cautare";
@@ -13,17 +12,9 @@
         {
             @foreach (var produs in Model.Produse)
             {
-                var imageSrc = await ImageConverter.GetImageSrcAsync(produs.IdProdus);
                 <div class="col-md-3 col-sm-6 mb-4">
                     <div class="card h-100 shadow-sm">
-                        @if (!string.IsNullOrEmpty(imageSrc))
-                        {
-                            <img src="@imageSrc" class="img-fluid" alt="Imagine produs">
-                        }
-                        else
-                        {
-                            <img src="shared/media/placeholder.png" class="img-fluid" alt="placeholder" />
-                        }
+                        @await Html.PartialAsync("_ImageView", (produs.IdProdus, CssClass: "img-fluid"))
                         <div class="card-body">
                             <h4 class="card-title"><strong>@produs.Nume</strong></h4>
                             <h6 class="card-text"><strong>Brand: </strong>@produs.Brand.NumeBrand</h6>
@@ -48,13 +39,8 @@
                             </ul>
 
                             <hr />
-                            <div class="d-flex justify-content-center">
-                                <div class="btn-group" role="group">
-                                    <a href="/DetaliiProdus/?id=@produs.IdProdus" class="btn btn-secondary">Vezi detalii <i class="bi bi-arrow-up-right-square"></i></a>
-                                    <button onclick="if (@produs.Stoc > 0) { addToCart(@produs.IdProdus); }" class="btn btn-info" @(produs.Stoc == 0 ? "disabled" : "")>
-                                        Adaugă în coș <i class="bi bi-bag-plus"></i>
-                                    </button>
-                                </div>
+                            <div class="d-grid gap-2">
+                                <a asp-page="/DetaliiProdus" asp-route-id="@produs.IdProdus" class="btn btn-secondary">Vezi detalii <i class="bi bi-arrow-up-right-square"></i></a>
                             </div>
                         </div>
                     </div>
