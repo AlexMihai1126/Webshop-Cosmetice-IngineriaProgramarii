@@ -1,0 +1,19 @@
+﻿@inject Proiect_ip.Data.Proiect_ipContext dbContext
+@model (int ProdusId, string CssClass)
+@{
+    string? imageSrc = null;
+    string altText = "Imagine";
+
+    var product = await dbContext.Produse.FindAsync(Model.ProdusId);
+    if (product?.ImageData != null && product.ImageData.Length > 0)
+    {
+        var imageBase64 = Convert.ToBase64String(product.ImageData);
+        imageSrc = $"data:{product.ImageType};base64,{imageBase64}";
+    }
+    else
+    {
+        imageSrc = "/shared/media/placeholder.png";
+    }
+}
+
+<img src="@imageSrc" alt="@altText" class="@Model.CssClass" />

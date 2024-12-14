@@ -20,7 +20,6 @@ builder.Services.AddMemoryCache();
 builder.Services.AddScoped<PointsService>();
 builder.Services.AddScoped<ProductSearchService>();
 builder.Services.AddScoped<ShoppingCartService>();
-builder.Services.AddScoped<ImageConverter>();
 builder.Services.AddScoped<CategoriiPartialService>();
 builder.Services.AddScoped<OrdersManagerService>();
 
