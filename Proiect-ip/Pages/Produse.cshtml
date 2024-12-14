@@ -120,34 +120,40 @@
                 <div class="col-md-3 col-sm-6 mb-4">
                     <div class="card h-100 shadow-sm">
                         @await Html.PartialAsync("_ImageView", (produs.IdProdus, CssClass: "img-fluid"))
-                        <div class="card-body">
-                            <h4 class="card-title"><strong>@produs.Nume</strong></h4>
-                            <h6 class="card-text"><strong>Brand: </strong>@produs.Brand.NumeBrand</h6>
-                            <hr />
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><p class="card-text"><strong>Preț: </strong> @(produs.Pret) RON</p></li>
-                                <li class="list-group-item">
-                                    <p>
-                                        Disponibilitate:
-                                        <strong>
-                                            @if (produs.Stoc > 0)
-                                            {
-                                                <span class="text-success">În stoc</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="text-danger">Nu este pe stoc</span>
-                                            }
-                                        </strong>
-                                    </p>
-                                </li>
-                            </ul>
-
-                            <hr />
-                            <div class="d-flex justify-content-center">
-                                <div class="btn-group" role="group">
-                                    <a class="btn btn-secondary" asp-page="/DetaliiProdus" asp-route-id="@produs.IdProdus">Vezi detalii <i class="bi bi-arrow-up-right-square"></i></a>
-                                    @if (produs.Stoc <= 0){
+                        <div class="card-body d-flex flex-column">
+                            <div>
+                                <h4 class="card-title"
+                                    style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0;">
+                                    <strong>@produs.Nume</strong>
+                                </h4>
+                                <h6 class="card-text"><strong>Brand: </strong>@produs.Brand.NumeBrand</h6>
+                                <hr />
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <p class="card-text"><strong>Preț: </strong> @(produs.Pret) RON</p>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <p>
+                                            Disponibilitate:
+                                            <strong>
+                                                @if (produs.Stoc > 0)
+                                                {
+                                                    <span class="text-success">În stoc</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">Nu este pe stoc</span>
+                                                }
+                                            </strong>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mt-auto">
+                                <hr />
+                                <div class="d-flex justify-content-center">
+                                    <div class="btn-group" role="group">
+                                        @if (produs.Stoc <= 0){
                                         <button type="button" class="btn btn-secondary" disabled aria-disabled="true">
                                             Nu este pe stoc
                                         </button>
@@ -159,11 +165,14 @@
                                             </button>
                                         </form>
                                     }
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
             }
         }
 
