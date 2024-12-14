@@ -153,6 +153,7 @@
                                 <hr />
                                 <div class="d-flex justify-content-center">
                                     <div class="btn-group" role="group">
+                                        <a class="btn btn-secondary" asp-page="/DetaliiProdus" asp-route-id="@produs.IdProdus">Vezi detalii <i class="bi bi-arrow-up-right-square"></i></a>
                                         @if (produs.Stoc <= 0){
                                         <button type="button" class="btn btn-secondary" disabled aria-disabled="true">
                                             Nu este pe stoc
