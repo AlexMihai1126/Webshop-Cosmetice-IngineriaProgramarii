@@ -3,33 +3,33 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Proiect_ip.Areas.Identity.Data;
 using Proiect_ip.Services.DataCache;
+using Proiect_ip.Models;
+using Proiect_ip.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Proiect_ip.Areas.Identity.Pages.Account.Manage
 {
-    public class ViewRewardsModel : PageModel
+    public class ViewRewardsModel(Proiect_ipContext context, UserManager<Proiect_ipUser> userManager, PointsService pointsService) : PageModel
     {
-        private readonly UserManager<Proiect_ipUser> _userManager;
-        private readonly PointsService _pointsService;
 
         public int Points { get; set; }
         public string? Message { get; set; }
 
-        public ViewRewardsModel(UserManager<Proiect_ipUser> userManager, PointsService pointsService)
-        {
-            _userManager = userManager;
-            _pointsService = pointsService;
-        }
+        public List<IstoricPuncte> istoricPuncte { get; set; }
 
         public async Task OnGetAsync()
         {
             ViewData["ActivePage"] = "ViewRewards";
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             
             if (user != null)
             {
                 try
                 {
-                    Points = await _pointsService.GetPointsAsync(user.Id);
+                    Points = await pointsService.GetPointsAsync(user.Id);
+                    istoricPuncte = await context.IstoricPuncte
+                        .Where(i => i.Proiect_ipUserID == user.Id)
+                        .ToListAsync();
                 }
                 catch (Exception)
                 {

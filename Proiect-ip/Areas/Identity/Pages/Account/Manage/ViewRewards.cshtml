@@ -23,3 +23,32 @@
         }
     </div>
 </div>
+
+@if (Model.istoricPuncte.Count != 0)
+{
+    <br />
+    <h2>Istoricul punctelor</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Puncte modificate</th>
+                    <th>Motiv</th>
+                    <th>Data modificare</th>
+                    <th>Id comanda</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var intrare in Model.istoricPuncte)
+                {
+                    <tr>
+                        <td>@intrare.Puncte</td>
+                        <td>@intrare.Motiv</td>
+                        <td>@intrare.DataAdaugare.ToShortDateString()</td>
+                        <td>@intrare.IdComanda</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
