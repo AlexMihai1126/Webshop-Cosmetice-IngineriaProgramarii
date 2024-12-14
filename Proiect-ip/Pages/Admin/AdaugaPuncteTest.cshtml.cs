@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using Proiect_ip.Areas.Identity.Data;
 using Proiect_ip.Services.DataCache;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Proiect_ip.Pages.Admin
 {
+    [Authorize(Roles ="Admin")]
     public class AdaugaPuncteTestModel(UserManager<Proiect_ipUser> userManager, PointsService pointsService) : PageModel
     {
         private readonly UserManager<Proiect_ipUser> _userManager = userManager;

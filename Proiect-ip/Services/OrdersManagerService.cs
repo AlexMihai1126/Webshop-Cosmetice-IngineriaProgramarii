@@ -3,13 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using Proiect_ip.Areas.Identity.Data;
 using Proiect_ip.Data;
 using Proiect_ip.Models;
+using Proiect_ip.Services.DataCache;
 namespace Proiect_ip.Services;
-public class OrdersManagerService(Proiect_ipContext context)
+public class OrdersManagerService(Proiect_ipContext context, PointsService pointsService)
 {
-    public async Task<List<Comanda>> GetAllOrdersAsync(Comanda.ComandaStatus? statusFilter, bool isLatest)
+    private const float RataConversiePuncte = 0.1f; // 1p = 0.1 LEI
+    private const float DiscountMaximPerComanda = 0.25f; //25% din valoarea totala a comenzii poate fi redusa
+    public async Task<List<Comanda>> GetAllOrdersAsync(Comanda.ComandaStatus? statusFilter, bool sortareDupaRecente)
     {
         IQueryable<Comanda> query = context.Comenzi.Include(c => c.Produse).Include(c => c.Utilizator).Include(c => c.ComandaProduse).ThenInclude(cp => cp.Produs);
-        if (isLatest)
+        if (sortareDupaRecente)
         {
             query = query.OrderByDescending(c => c.DataComanda);
             //Ordonare dupa cele mai recente sau cele mai vechi
@@ -24,14 +27,14 @@ public class OrdersManagerService(Proiect_ipContext context)
         return await query.ToListAsync();
     }//Adminul poate vedea toate comenzile din site si poate vedea rezultatele filtrate
 
-    public async Task UpdateOrderStatusAsync(int orderId, Comanda.ComandaStatus newStatus)
+    public async Task UpdateOrderStatusAsync(int idComanda, Comanda.ComandaStatus newStatus)
     {
-        var order = await context.Comenzi.FindAsync(orderId);
-        if (order == null)
+        var comanda = await context.Comenzi.FindAsync(idComanda);
+        if (comanda == null)
             throw new InvalidOperationException("Order not found");
 
-        order.Status = newStatus;
-        context.Comenzi.Update(order);
+        comanda.Status = newStatus;
+        context.Comenzi.Update(comanda);
         await context.SaveChangesAsync();
     }//Adminul poate schimba statusul unei comenzi
 
@@ -45,17 +48,52 @@ public class OrdersManagerService(Proiect_ipContext context)
             .ToListAsync();
     } //Clientul isi poate vedea propriile comenzi
 
-    public async Task CancelOrderAsync(int orderId, string userId)
+    public async Task CancelOrderAsync(int idComanda, string userId)
     {
-        var order = await context.Comenzi.FindAsync(orderId);
-        if (order == null || order.Proiect_ipUserID != userId)
+        var comanda = await context.Comenzi.FindAsync(idComanda);
+        if (comanda == null || comanda.Proiect_ipUserID != userId)
             throw new InvalidOperationException("Order not found or not authorized");
 
-        if (order.Status != Comanda.ComandaStatus.InProcesare)
+        if (comanda.Status != Comanda.ComandaStatus.InProcesare)
             throw new InvalidOperationException("Cannot cancel this order");
 
-        order.Status = Comanda.ComandaStatus.Anulat;
-        context.Comenzi.Update(order);
+        comanda.Status = Comanda.ComandaStatus.Anulat;
+        context.Comenzi.Update(comanda);
         await context.SaveChangesAsync();
     }//Clientul isi poate anula singur comanda
+
+    public async Task AddDiscountAsync(int idComanda, string userId)
+    {
+        var comanda = await context.Comenzi.FindAsync(idComanda);
+        if (comanda == null || comanda.Proiect_ipUserID != userId)
+            throw new InvalidOperationException("Comanda negasita sau utilizatorul nu are acces.");
+
+        if (comanda.Status != Comanda.ComandaStatus.InProcesare)
+            throw new InvalidOperationException("Nu se mai pot adauga reduceri dupa faza de procesare.");
+
+        var puncteUtilizator = await pointsService.GetPointsAsync(userId);
+
+        if (puncteUtilizator <= 0)
+            throw new InvalidOperationException("Utilizatorul nu are puncte disponibile.");
+
+        var valoareDiscountMaxim = comanda.PretTotal * (decimal)DiscountMaximPerComanda;
+        var valoarePuncte = (decimal)puncteUtilizator * (decimal)RataConversiePuncte;
+        var discount = Math.Min(valoareDiscountMaxim, valoarePuncte);
+        comanda.PretTotal -= discount;
+
+        var puncteUtilizate = (int)(discount / (decimal)RataConversiePuncte);
+        string? motiv = $"Reducere aplicata la comanda {comanda.IdComanda}";
+        try
+        {
+            await pointsService.ModifyPointsAsync(userId, -puncteUtilizate, motiv, comanda.IdComanda);
+        }
+        catch (InvalidOperationException ex)
+        {
+            throw new InvalidOperationException($"Eroare la scaderea punctelor: {ex.Message}");
+        }
+
+        context.Comenzi.Update(comanda);
+        await context.SaveChangesAsync();
+    }
+
 }
