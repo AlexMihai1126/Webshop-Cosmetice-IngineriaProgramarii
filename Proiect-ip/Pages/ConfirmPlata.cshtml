@@ -4,56 +4,31 @@
     ViewData["Title"] = "Confirmare procesare comandă";
 }
 
-<style>
-    .confirmation-container {
-        font-family: Arial, sans-serif;
-        margin: 20px auto;
-        max-width: 600px;
-        line-height: 1.6;
-        text-align: center;
-    }
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h2 class="mb-4">@ViewData["Title"]</h2>
 
-        .confirmation-container h2 {
-            margin-bottom: 30px;
-            color: #333;
-        }
-
-        .confirmation-container p {
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-
-        .confirmation-container .btn {
-            display: inline-block;
-            padding: 12px 20px;
-            margin-top: 10px;
-            color: #fff;
-            text-decoration: none;
-            background-color: #28a745;
-            border-radius: 5px;
-            text-align: center;
-            transition: background-color 0.3s ease;
-        }
-
-            .confirmation-container .btn:hover {
-                background-color: #218838;
+            @if (Model.Status == "Success")
+            {
+                <div class="alert alert-success" role="alert">
+                    <p class="mb-2">Comanda a fost procesată cu succes!</p>
+                    <p>Vă mulțumim pentru achiziția dumneavoastră!</p>
+                </div>
+                <div class="d-grid gap-2 d-sm-flex justify-content-center mt-3">
+                    <a href="/Produse" class="btn btn-success btn-lg">Continuă cumpărăturile</a>
+                    <a href="/" class="btn btn-secondary btn-lg">Înapoi la Magazin</a>
+                </div>
             }
-</style>
-
-
-<div class="confirmation-container">
-    <h2>@ViewData["Title"]</h2>
-
-    @if (Model.Status == "Success")
-    {
-        <p>Comanda a fost procesată cu succes!</p>
-        <p>Vă mulțumim pentru achiziția dumneavoastră!</p>
-        <a href="/Produse" class="btn">Continuă cumpărăturile</a>
-        <a href="/" class="btn">Înapoi la Magazin</a>
-    }
-    else
-    {
-        <p>Comanda nu a putut fi procesată. Vă rugăm să încercați din nou sau să anulați comanda.</p>
-        <a href="/Cos" class="btn">Reîncepe procesul de achiziționare</a>
-    }
+            else
+            {
+                <div class="alert alert-danger" role="alert">
+                    <p class="mb-2">Comanda nu a putut fi procesată. Vă rugăm să încercați din nou sau să anulați comanda.</p>
+                </div>
+                <div class="d-grid gap-2 d-sm-flex justify-content-center mt-3">
+                    <a href="/Cos" class="btn btn-warning btn-lg">Reîncepe procesul de achiziționare</a>
+                </div>
+            }
+        </div>
+    </div>
 </div>

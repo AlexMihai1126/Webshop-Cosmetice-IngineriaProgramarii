@@ -10,7 +10,7 @@ namespace Proiect_ip.Pages
 
         public void OnGet(string status)
         {
-            Status = status; // Status passed as a query parameter (e.g., "Success" or "Fail")
+            Status = status; 
         }
     }
 }
