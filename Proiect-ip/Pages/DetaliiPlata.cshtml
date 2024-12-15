@@ -4,151 +4,61 @@
     ViewData["Title"] = "Detalii Plată";
 }
 
-<style>
-    .form-container {
-        font-family: Arial, sans-serif;
-        margin: 20px auto;
-        max-width: 600px;
-        line-height: 1.6;
-    }
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center mb-4">@ViewData["Title"]</h2>
 
-        .form-container h2 {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .form-container form {
-            display: flex;
-            flex-direction: column;
-            gap: 25px; /* Spațiu mai mare între grupuri */
-        }
-
-        .form-container div {
-            display: flex;
-            flex-direction: column;
-            gap: 8px; /* Spațiu între label și câmp */
-        }
-
-        .form-container label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .form-container input,
-        .form-container select,
-        .form-container button,
-        .form-container a {
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-            .form-container input[type="text"],
-            .form-container input[type="tel"],
-            .form-container input[type="month"],
-            .form-container select {
-                width: 100%;
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
             }
 
-        .form-container button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+            <form method="post">
+                <div class="mb-3">
+                    <label for="Nume" class="form-label">Nume</label>
+                    <input type="text" id="Nume" name="Nume" class="form-control" value="@Model.Nume" required />
+                </div>
 
-            .form-container button:hover {
-                background-color: #0056b3;
-            }
+                <div class="mb-3">
+                    <label for="Prenume" class="form-label">Prenume</label>
+                    <input type="text" id="Prenume" name="Prenume" class="form-control" value="@Model.Prenume" required />
+                </div>
 
-        .form-container #CardFields {
-            display: none;
-        }
+                <div class="mb-3">
+                    <label for="Telefon" class="form-label">Număr de Telefon</label>
+                    <input type="tel" id="Telefon" name="Telefon" class="form-control" pattern="07[0-9]{8}" title="Numărul de telefon trebuie să înceapă cu 07 și să fie format din 10 cifre." required />
+                    <div class="form-text">Numărul de telefon trebuie să înceapă cu 07 și să fie format din 10 cifre.</div>
+                </div>
 
-        .form-container a {
-            text-align: center;
-            margin-top: 15px;
-            color: #007bff;
-            text-decoration: none;
-        }
+                <div class="mb-3">
+                    <label for="Adresa" class="form-label">Adresă</label>
+                    <input type="text" id="Adresa" name="Adresa" class="form-control" value="@Model.Adresa" required />
+                </div>
 
-            .form-container a:hover {
-                text-decoration: underline;
-            }
-</style>
+                <div class="mb-3">
+                    <label for="MetodaPlata" class="form-label">Metodă de Plată</label>
+                    <select id="MetodaPlata" name="MetodaPlata" class="form-select" onchange="toggleCardFields()" required>
+                        <option value="Numerar">Numerar</option>
+                    </select>
+                </div>
 
-<div class="form-container">
-    <h2>@ViewData["Title"]</h2>
+                <div>
+                    <p><strong>Total de plată:</strong> @Model.TotalDePlata.ToString("0.00") RON</p>
+                </div>
 
-    <form method="post">
-        <div>
-            <label for="Nume">Nume</label>
-            <input type="text" id="Nume" name="Nume" value="@Model.Nume" required />
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Confirmă Plata</button>
+                </div>
+
+                <div class="mt-3 text-center">
+                    <a href="/Cos" class="text-decoration-none">Anulează</a>
+                </div>
+            </form>
         </div>
-        <div>
-            <label for="Prenume">Prenume</label>
-            <input type="text" id="Prenume" name="Prenume" value="@Model.Prenume" required />
-        </div>
-        <div>
-            <label for="Telefon">Număr de Telefon</label>
-            <input type="tel" id="Telefon" name="Telefon" pattern="07[0-9]{8}" title="Numărul de telefon trebuie să înceapă cu 07 și să fie format din 10 cifre." required />
-            <small>Numărul de telefon trebuie să înceapă cu 07 și să fie format din 10 cifre.</small>
-        </div>
-        <div>
-            <label for="Adresa">Adresă</label>
-            <input type="text" id="Adresa" name="Adresa" value="@Model.Adresa" required />
-        </div>
-        <div>
-            <label for="MetodaPlata">Metodă de Plată</label>
-            <select id="MetodaPlata" name="MetodaPlata" onchange="toggleCardFields()" required>
-                <option value="Numerar">Numerar</option>
-                <option value="Card">Card</option>
-            </select>
-        </div>
-        <div id="CardFields">
-            <div>
-                <label for="NumarCard">Număr Card</label>
-                <input type="text" id="NumarCard" name="NumarCard" maxlength="16" pattern="\d{16}" required />
-                <small>Introduceți exact 16 cifre.</small>
-            </div>
-            <div>
-                <label for="CVC">CVC</label>
-                <input type="text" id="CVC" name="CVC" maxlength="3" pattern="\d{3}" required />
-                <small>Introduceți exact 3 cifre.</small>
-            </div>
-            <div>
-                <label for="DataExpirare">Data Expirare</label>
-                <input type="month" id="DataExpirare" name="DataExpirare" />
-            </div>
-        </div>
-        <div>
-            <p><strong>Total de plată:</strong> @Model.TotalDePlata RON</p>
-        </div>
-        <div style="text-align: center;">
-            <button type="submit">Confirmă Plata</button>
-        </div>
-        <div>
-            <a href="/Cos">Anulează</a>
-        </div>
-    </form>
+    </div>
 </div>
-
-<script>
-    function toggleCardFields() {
-        const metodaPlata = document.getElementById("MetodaPlata").value;
-        const cardFields = document.getElementById("CardFields");
-        if (metodaPlata === "Numerar") {
-            cardFields.style.display = "none";
-            document.getElementById("NumarCard").required = false;
-            document.getElementById("CVC").required = false;
-            document.getElementById("DataExpirare").required = false;
-        } else {
-            cardFields.style.display = "block";
-            document.getElementById("NumarCard").required = true;
-            document.getElementById("CVC").required = true;
-            document.getElementById("DataExpirare").required = true;
-        }
-    }
-</script>

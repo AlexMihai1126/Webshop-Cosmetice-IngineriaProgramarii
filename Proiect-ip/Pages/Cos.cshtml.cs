@@ -14,7 +14,7 @@ namespace Proiect_ip.Pages
     [Authorize]
     public class CosModel(UserManager<Proiect_ipUser> userManager, ShoppingCartService cartService, Proiect_ipContext context) : PageModel
     {
-        public List<(int ProductId, int Cantitate)> Produse {  get; set; }
+        public List<(int ProductId, int Cantitate)> Produse { get; set; }
         public List<Produs> ProduseCos { get; set; } = [];
         public async Task<IActionResult> OnGetAsync()
         {
@@ -40,12 +40,12 @@ namespace Proiect_ip.Pages
             return RedirectToPage();
         }
 
-        public async Task <IActionResult> OnPostCreateOrderAsync()
+        public async Task<IActionResult> OnPostCreateOrderAsync()
         {
             var user = await userManager.GetUserAsync(User);
             var userId = user.Id;
             await cartService.PlaceOrderAsync(userId);
-            return RedirectToPage();
+            return RedirectToPage("DetaliiPlata", new { userId });
         }
         public async Task<IActionResult> OnPostUpdateQuantityAsync(int productId, int cantitate)
         {
