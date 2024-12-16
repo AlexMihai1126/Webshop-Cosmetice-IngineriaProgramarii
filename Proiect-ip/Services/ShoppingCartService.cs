@@ -170,6 +170,67 @@ namespace Proiect_ip.Services
             _memoryCache.Remove(userId);
         } //Functia de trimitere a comenzii
 
+        public async Task<int> PlaceOrder2Async(string userId)
+        {
+            var cosUtilizator = await GetCartFromMemoryAsync(userId);
+            if (cosUtilizator == null || cosUtilizator.Count == 0)
+            {
+                throw new InvalidOperationException("Cosul este gol.");
+            }
+
+            // 1. Verifica stocul pentru toate produsele din cos si scoate din stoc
+            foreach (var item in cosUtilizator)
+            {
+                var produs = await _context.Produse.FindAsync(item.IdProdusCos);
+                if (produs == null || produs.Stoc < item.CantitateInCos)
+                {
+                    throw new InvalidOperationException($"Stoc insuficient pentru produsul cu ID {item.IdProdusCos}.");
+                }
+                produs.Stoc -= item.CantitateInCos;
+            }
+
+            // Salvam datele ca sa ne asiguram ca un alt user nu poate cumpara mai mult decat mai avem ramas
+            await _context.SaveChangesAsync();
+
+            // 2. Creare comanda
+            var total = cosUtilizator.Sum(c => c.CantitateInCos * c.PretPerUnitate);
+            var comandaNoua = new Comanda
+            {
+                Proiect_ipUserID = userId,
+                DataComanda = DateTime.UtcNow,
+                PretTotal = total,
+                PuncteGenerate = (int)total, //momentan 1 leu = 1 punct
+                Status = Comanda.ComandaStatus.InProcesare
+            };
+
+            _context.Comenzi.Add(comandaNoua);
+            await _context.SaveChangesAsync();
+
+            // 3. Adaugare asociere produse cumparate cu comanda noua in tabelul de legatura
+            foreach (var item in cosUtilizator)
+            {
+                _context.ComandaProduse.Add(new ComandaProdus
+                {
+                    IdComanda = comandaNoua.IdComanda,
+                    IdProdus = item.IdProdusCos,
+                    Cantitate = item.CantitateInCos,
+                    PretUnitar = item.PretPerUnitate
+                });
+            }
+
+            await _context.SaveChangesAsync();
+
+            // 4. Acorda puncte aferente comenzii
+            string Motiv = $"Comanda {comandaNoua.IdComanda}";
+            await _pointsService.ModifyPointsAsync(userId, comandaNoua.PuncteGenerate, Motiv, comandaNoua.IdComanda);
+
+            // 5. Goleste cosul
+            _memoryCache.Remove(userId);
+            return comandaNoua.IdComanda;
+            //TODO - refacere model comanda sa aiba status plata si asta creeaza doar comanda, nu o confirma si dupa serviciul de plata se ocupa de confirmare
+            //TODO - sa se afiseze si reducerea care va fi aplicata pe cardul de detalii
+        } //Functia de trimitere a comenzii
+
         public async Task<List<(int ProductId, int Cantitate)>> GetProductsAsync(string userId)
         {
             ArgumentNullException.ThrowIfNull(userId);

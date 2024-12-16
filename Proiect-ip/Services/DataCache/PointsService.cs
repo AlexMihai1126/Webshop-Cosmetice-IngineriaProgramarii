@@ -70,5 +70,6 @@ namespace Proiect_ip.Services.DataCache
             return nrPuncteModificat;
         }
     }
+    //TODO - punctele ii vin user-ului numai dupa ce se confirma comanda de admin
 
 }

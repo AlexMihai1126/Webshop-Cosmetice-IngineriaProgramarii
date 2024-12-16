@@ -94,6 +94,6 @@ public class OrdersManagerService(Proiect_ipContext context, PointsService point
 
         context.Comenzi.Update(comanda);
         await context.SaveChangesAsync();
-    }
+    } //TODO - utilizatorul va trebui sa primeasca puncte aferente comenzii dupa ce se aplica reducerea (daca face comanda de 100, aplica 25% reducere tre sa mai primeasca doar 75 puncte);
 
 }

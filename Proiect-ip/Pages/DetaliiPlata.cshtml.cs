@@ -1,22 +1,35 @@
-﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NuGet.Versioning;
 using Proiect_ip.Areas.Identity.Data;
 using Proiect_ip.Services;
+using Proiect_ip.Services.DataCache;
 
 namespace Proiect_ip.Pages
 {
+    [Authorize]
     public class DetaliiPlataModel : PageModel
     {
         private readonly UserManager<Proiect_ipUser> _userManager;
         private readonly ShoppingCartService _cartService;
+        private readonly PointsService _pointsService;
+        private readonly OrdersManagerService _ordersManager;
 
-        public DetaliiPlataModel(UserManager<Proiect_ipUser> userManager, ShoppingCartService cartService)
+        public DetaliiPlataModel(
+            UserManager<Proiect_ipUser> userManager,
+            ShoppingCartService cartService,
+            PointsService pointsService,
+            OrdersManagerService ordersManager)
         {
             _userManager = userManager;
-            _cartService = cartService; 
+            _cartService = cartService;
+            _pointsService = pointsService;
+            _ordersManager = ordersManager;
         }
+
 
         [BindProperty]
         public string Nume { get; set; }
@@ -35,40 +48,51 @@ namespace Proiect_ip.Pages
 
         [BindProperty]
         public decimal TotalDePlata { get; set; }
+        [BindProperty]
+        public bool AplicaReducere { get; set; }
 
-        public async Task OnGetAsync()
+        public int UserPoints { get; set; }
+
+        public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            var userId = user?.Id;
-
-            if (!string.IsNullOrEmpty(userId))
+            var (suma, nrProduse) = await _cartService.GetCartDataAsync(user.Id);
+            if(suma == 0 && nrProduse == 0)
             {
-                // metoda din ShoppingCartService pentru a obtine totalul
-                var (suma, _) = await _cartService.GetCartDataAsync(userId);
-                TotalDePlata = suma;
+                return RedirectToPage("/Cos");
             }
-            else
-            {
-                TotalDePlata = 0; // Daca utilizatorul nu este conectat sau cosul este gol
-            }
-        }
-
-
-        public async Task<IActionResult> OnPost()
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.GetUserAsync(User);
-                var userId = user.Id;
-
-                await _cartService.PlaceOrderAsync(userId);
-
-                return RedirectToPage("/ConfirmPlata", new { status = "Success" });
-            }
+            UserPoints = await _pointsService.GetPointsAsync(user.Id);
+            TotalDePlata = suma;
 
             return Page();
         }
 
 
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            var user = await _userManager.GetUserAsync(User);
+            int idComanda = 0;
+
+            try
+            {
+                idComanda = await _cartService.PlaceOrder2Async(user.Id);
+            }
+            catch (Exception)
+            {
+                return RedirectToPage("/Cos");
+            }
+
+            if (AplicaReducere)
+            {
+                await _ordersManager.AddDiscountAsync(idComanda, user.Id);
+            }
+
+            return RedirectToPage("/ConfirmPlata", new { status = "Success" });
+
+        }
     }
 }

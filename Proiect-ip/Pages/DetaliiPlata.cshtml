@@ -51,12 +51,18 @@
                     <p><strong>Total de plată:</strong> @Model.TotalDePlata.ToString("0.00") RON</p>
                 </div>
 
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-success">Confirmă Plata</button>
-                </div>
-
-                <div class="mt-3 text-center">
-                    <a href="/Cos" class="text-decoration-none">Anulează</a>
+                <div class="btn-group" role="group">
+                    @if (Model.UserPoints != 0)
+                    {
+                        <input type="checkbox"
+                               class="btn-check"
+                               id="btn-check"
+                               autocomplete="off"
+                               asp-for="AplicaReducere" />
+                        <label class="btn btn-outline-secondary" for="btn-check">Aplica reducere folosind puncte?</label>
+                    }
+                    <button type="submit" class="btn btn-success">Trimite comanda</button>
+                    <a asp-page="Cos" class="btn btn-danger">Anulează</a>
                 </div>
             </form>
         </div>
