@@ -13,12 +13,15 @@
         @if (Model.ProduseSlideshow.Any())
         {
             int index = 0;
-            var produseInGrupuri = Model.ProduseSlideshow
+            // Randomizează produsele
+            var produseRandomizate = Model.ProduseSlideshow
+            .OrderBy(x => Guid.NewGuid()) // Generare aleatorie pentru ordine
+            .Take(28) // Ia doar primele 8 produse aleatorii
             .Select((produs, i) => new { produs, index = i })
-            .GroupBy(x => x.index / 4) 
+            .GroupBy(x => x.index / 4) // Grupa de câte 4 produse
             .ToList();
 
-            foreach (var grup in produseInGrupuri)
+            foreach (var grup in produseRandomizate)
             {
                 <div class="carousel-item @(index == 0 ? "active" : "")">
                     <div class="row">

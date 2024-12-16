@@ -25,8 +25,8 @@ namespace Proiect_ip.Pages
             ProduseSlideshow = await _context.Produse
         .Include(p => p.Categorie)
         .Include(p => p.Brand)
-        .OrderBy(p => p.IdProdus)
-        .Take(20)
+        .OrderBy(x => Guid.NewGuid())
+        .Take(28)
         .ToListAsync();
 
             return Page();
