@@ -60,7 +60,7 @@
                         <td style="white-space:nowrap">
                             @if (produs.ImageData != null && produs.ImageData.Length > 0)
                             {
-                                await Html.PartialAsync("_ImageView", (produs.IdProdus, CssClass: "img-fluid"));
+                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#prodImageModal-@produs.IdProdus">Vezi imagine</button>
                             }
                             else
                             {

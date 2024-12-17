@@ -13,7 +13,8 @@ namespace Proiect_ip.Pages.Admin.Produse
         private readonly Proiect_ipContext context;
         public List<SelectListItem> Categorii { get; set; }
         public List<SelectListItem> Branduri { get; set; }
-
+        [BindProperty]
+        public bool UpdateImagine { get; set; } = false;
         [BindProperty]
         public ProdusDto ProdusDto { get; set; } = new ProdusDto();
         public Produs Produs { get; set; } = new Produs();
@@ -64,20 +65,26 @@ namespace Proiect_ip.Pages.Admin.Produse
                 return RedirectToPage("/Admin/Produse/Overview");
             }
 
-            byte[] imageBytes = null;
-
-            if (ProdusDto.Image != null)
+            if (UpdateImagine)
             {
-                if (ProdusDto.Image.ContentType != "image/png" && ProdusDto.Image.ContentType != "image/jpeg")
+                byte[] imageBytes = null;
+
+                if (ProdusDto.Image != null)
                 {
-                    ModelState.AddModelError("ProdusDto.Image", "Se pot incarca doar imagini PNG sau JPEG.");
-                }
-                else
-                    using (var memoryStream = new MemoryStream())
+                    if (ProdusDto.Image.ContentType != "image/png" && ProdusDto.Image.ContentType != "image/jpeg")
                     {
-                        await ProdusDto.Image.CopyToAsync(memoryStream);
-                        imageBytes = memoryStream.ToArray();
+                        ModelState.AddModelError("ProdusDto.Image", "Se pot incarca doar imagini PNG sau JPEG.");
                     }
+                    else
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await ProdusDto.Image.CopyToAsync(memoryStream);
+                            imageBytes = memoryStream.ToArray();
+                        }
+                }
+
+                produs.ImageData = imageBytes;
+                produs.ImageType = ProdusDto.Image?.ContentType;
             }
 
             if (!ModelState.IsValid)
@@ -91,8 +98,6 @@ namespace Proiect_ip.Pages.Admin.Produse
             produs.Pret = ProdusDto.Pret;
             produs.Stoc = ProdusDto.Stoc;
             produs.IdCategorie = ProdusDto.CategorieId;
-            produs.ImageData = imageBytes;
-            produs.ImageType = ProdusDto.Image?.ContentType;
             await context.SaveChangesAsync();
 
             return RedirectToPage("/Admin/Produse/Overview");
