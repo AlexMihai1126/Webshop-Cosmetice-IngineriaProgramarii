@@ -301,6 +301,12 @@ namespace Proiect_ip.Migrations
                     b.Property<int>("PuncteGenerate")
                         .HasColumnType("int");
 
+                    b.Property<int>("PuncteUtilizate")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Reducere")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("IdComanda");
 
                     b.HasIndex("Proiect_ipUserID");

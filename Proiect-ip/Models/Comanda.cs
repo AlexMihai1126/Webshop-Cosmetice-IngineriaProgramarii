@@ -26,7 +26,10 @@ namespace Proiect_ip.Models
         public DateTime DataComanda { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal PretTotal { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Reducere { get; set; }
         public int PuncteGenerate { get; set; }
+        public int PuncteUtilizate { get; set; }
 
         //Navigation properties
         public ComandaStatus CStatus { get; set; }

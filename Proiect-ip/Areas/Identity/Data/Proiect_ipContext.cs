@@ -48,7 +48,7 @@ namespace Proiect_ip.Data
                 .HasOne(c => c.Utilizator)
                 .WithMany(u => u.Comenzi)
                 .HasForeignKey(c => c.Proiect_ipUserID)
-                .OnDelete(DeleteBehavior.Cascade); // Daca se sterge un user nu i se sterg si comenzile
+                .OnDelete(DeleteBehavior.Cascade); // Daca se sterge un user i se sterg si comenzile
 
             // Relatie dintre Produs si ComandaProdus
             builder.Entity<ComandaProdus>()
