@@ -7,7 +7,7 @@
 }
 <div class="container">
     <h2 class="text-center mb-5">Brand nou</h2>
-
+    <hr />
     <form method="post">
         <div class="mb-3 row">
             <label class="col-sm-4 col-form-label">Nume</label>
@@ -18,9 +18,9 @@
         </div>
 
         <div class="mb-3 row">
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-success">Salvează</button>
-                <a class="btn btn-danger" href="/Admin/Branduri/Overview" role="button">Anulează</a>
+            <div class="btn-group" role="group">
+                <button type="submit" class="btn btn-outline-success">Salvează</button>
+                <button type="button" class="btn btn-outline-danger" onclick="window.location.href='/Admin/Branduri/Overview'">Anulează</button>
             </div>
         </div>
     </form>

@@ -11,10 +11,10 @@
     <hr />
 
     <div class="d-grid gap-2">
-        <a class='btn btn-success' href='/Admin/Produse/Creare'>Produs Nou</a>
+        <button type="button" class='btn btn-outline-secondary' onclick="window.location.href='/Admin/Produse/Creare'">Produs Nou</button>
     </div>
 
-    <hr />
+    <br />
     @if (Model.Produs.Count() == 0)
     {
         <div class="alert alert-danger" role="alert">
@@ -43,7 +43,7 @@
                         <td>@produs.Brand.NumeBrand</td>
                         <td>@produs.Nume</td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#prodDescModal-@produs.IdProdus">Descriere</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#prodDescModal-@produs.IdProdus">Descriere</button>
                         </td>
                         <td>@(produs.Pret) RON</td>
                         <td>
@@ -60,16 +60,18 @@
                         <td style="white-space:nowrap">
                             @if (produs.ImageData != null && produs.ImageData.Length > 0)
                             {
-                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#prodImageModal-@produs.IdProdus">Vezi imagine</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#prodImageModal-@produs.IdProdus">Vezi imagine</button>
                             }
                             else
                             {
-                                <button type="button" class="btn btn-sm btn-secondary" disabled>Fără imagine</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" disabled>Fără imagine</button>
                             }
                         </td>
                         <td style="white-space:nowrap">
-                            <button type="button" class="btn btn-sm btn-success" onclick="window.location.href='/Admin/Produse/Edit?id=@produs.IdProdus'">Edit</button>
-                            <button type="button" class="btn btn-sm btn-danger" onclick="window.location.href='/Admin/Produse/Stergere?id=@produs.IdProdus'">Delete</button>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-sm btn-outline-primary border-end-0" onclick="window.location.href='/Admin/Produse/Edit?id=@produs.IdProdus'">Modifică</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="window.location.href='/Admin/Produse/Stergere?id=@produs.IdProdus'">Șterge</button>
+                            </div>
                         </td>
                     </tr>
                 }
@@ -89,7 +91,7 @@
                             <p>@produs.Descriere</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Închide</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Închide</button>
                         </div>
                     </div>
                 </div>
@@ -108,7 +110,7 @@
                                 @await Html.PartialAsync("_ImageView", (produs.IdProdus, CssClass: "img-fluid"))
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Închide</button>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Închide</button>
                             </div>
                         </div>
                     </div>

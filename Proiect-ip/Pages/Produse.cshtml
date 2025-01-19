@@ -14,19 +14,17 @@
     }
 </script>
 
-@{
-    if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-    }
-
-    if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-    }
-}
-<div class="container-fluid mx-auto">
+<div class="container-fluid mx-auto mt-4">
     @{
+        if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+
+        if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
         string titlu = "Toate produsele";
 
         if (!string.IsNullOrEmpty(Model.NumeBrandCurent) && !string.IsNullOrEmpty(Model.NumeCategCurenta))
@@ -42,7 +40,8 @@
             titlu = $"Produse din categoria {Model.NumeCategCurenta}";
         }
     }
-    <h1 class="text-center my-4">@titlu</h1>
+    <h2 class="text-center">@titlu</h2>
+    <br />
     <div class="accordion mb-4" id="filtrari-meniu">
         <div class="accordion-item">
             <h2 class="accordion-header">
@@ -90,13 +89,13 @@
                             <span id="pretMaxValue">@Model.PretMax.GetValueOrDefault(Model.PretMaximDB)</span>
                         </div>
 
-
-                        <button type="submit" class="btn btn-primary w-100">Filtrează</button>
+                        <div class="btn-group" role="group">
+                            <button type="submit" class="btn btn-outline-primary">Filtrează</button>
+                            
+                        </div>
                     </form>
                     <form method="post" asp-page-handler="ResetFilters">
-                        <input type="hidden" name="Categorie" value="@Model.BrandId" />
-                        <input type="hidden" name="Categorie" value="@Model.CategorieId" />
-                        <button type="submit" class="btn btn-secondary w-100">Resetează filtrele</button>
+                        <button type="submit" class="btn btn-outline-secondary">Resetează filtrele</button>
                     </form>
                 </div>
             </div>
@@ -152,21 +151,20 @@
                             <div class="mt-auto">
                                 <hr />
                                 <div class="d-flex justify-content-center">
-                                    <div class="btn-group" role="group">
-                                        <a class="btn btn-secondary" asp-page="/DetaliiProdus" asp-route-id="@produs.IdProdus">Vezi detalii <i class="bi bi-arrow-up-right-square"></i></a>
-                                        @if (produs.Stoc <= 0){
-                                        <button type="button" class="btn btn-secondary" disabled aria-disabled="true">
-                                            Nu este pe stoc
-                                        </button>
-                                    } else {
-                                        <form method="post" asp-page-handler="AddToCart" asp-route-id="@produs.IdProdus">
-                                            <input type="hidden" name="quantity" value="1" />
-                                            <button type="submit" class="btn btn-info">
-                                                Adaugă în coș <i class="bi bi-bag-plus"></i>
-                                            </button>
-                                        </form>
-                                    }
-                                    </div>
+                                    <form method="post" asp-page-handler="AddToCart" asp-route-id="@produs.IdProdus">
+                                        <div class="btn-group" role="group">
+                                            <a role="button" class="btn btn-outline-secondary border-end-0" asp-page="/DetaliiProdus" asp-route-id="@produs.IdProdus">Vezi detalii</a>
+                                            @if (produs.Stoc <= 0)
+                                            {
+                                                <button type="button" class="btn btn-outline-secondary" disabled aria-disabled="true">Nu este pe stoc</button>
+                                            }
+                                            else
+                                            {
+                                                <input type="hidden" name="quantity" value="1" />
+                                                <button type="submit" class="btn btn-outline-primary">Adaugă în coș</button>
+                                            }
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>

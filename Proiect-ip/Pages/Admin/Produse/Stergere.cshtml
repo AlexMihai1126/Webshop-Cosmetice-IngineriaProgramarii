@@ -3,21 +3,21 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Roles = "Admin")]
 @{
-    ViewData["Title"] = "Sterge produs";
+    ViewData["Title"] = "Șterge produs";
 }
 
 <div class="container">
-    <h1 class="text-center mb-5">Confirmare stergere</h1>
+    <h2 class="text-center mb-5">Confirmare ștergere</h2>
     <hr />
-    <h2 class="text-center">Sigur doresti sa stergi produsul?</h2>
-    <hr />
+    <h3 class="text-center">Sigur dorești să ștergi produsul?</h3>
+    <br />
     <form method="post">
         <input type="hidden" name="id" value="@Model.Produs.IdProdus" />
 
         <div class="mb-3 row">
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-danger">Sterge</button>
-                <a class="btn btn-secondary" href="/Admin/Produse/Overview" role="button">Anuleaza</a>
+            <div class="btn-group" role="group">
+                <button type="submit" class="btn btn-outline-danger">Șterge</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='/Admin/Produse/Overview'">Anulează</button>
             </div>
         </div>
     </form>

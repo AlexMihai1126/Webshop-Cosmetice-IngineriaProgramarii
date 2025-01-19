@@ -43,6 +43,10 @@ namespace Proiect_ip.Services
         public async Task AddToCartAsync(string? userId, int idProdus, int cantitate)
         {
             ArgumentNullException.ThrowIfNull(userId);
+            if(cantitate <= 0)
+            {
+                throw new Exception("Cantitatea trebuie sa fie mai mare ca 0!");
+            }
             var produs = await _context.Produse.FindAsync(idProdus);
             if (produs == null || produs.Stoc < cantitate)
             {

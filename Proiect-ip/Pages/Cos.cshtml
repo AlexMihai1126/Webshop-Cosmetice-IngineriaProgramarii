@@ -1,11 +1,12 @@
 ﻿@page
 @model Proiect_ip.Pages.CosModel
 @{
-    ViewData["Title"] = "Cosul de cumparaturi";
+    ViewData["Title"] = "Coșul de cumpărături";
 }
 
 <div class="container mt-4">
-    <h1 class="mb-4">Cosul de cumparaturi</h1>
+    <h2 class="text-center">Coșul de cumpărături</h2>
+    <hr />
     @if (Model.Produse.Count == 0)
     {
         <p class="text-muted">Cosul este gol.</p>
@@ -38,16 +39,18 @@
                         <td>@item.Nume</td>
                         <td>
                             <form method="post" asp-page-handler="UpdateQuantity" asp-route-productId="@item.IdProdus" class="d-flex">
-                                <div class="input-group mb-3">
-                                    <input type="number" name="cantitate" value="@cantitate" class="form-control" min="1" required />
-                                    <button type="submit" class="btn btn-primary btn-sm">Actualizeaza</button>
+                                <div class="input-group input-group-sm">
+                                    <input type="number" name="cantitate" value="@cantitate" class="form-control form-control-sm" min="1" required />
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Actualizeaza</button>
                                 </div>
                             </form>
                         </td>
                         <td>
-                            <a asp-page="/DetaliiProdus" asp-route-id="@item.IdProdus" class="btn btn-info me-2">Detalii</a>
                             <form method="post" asp-page-handler="RemoveFromCart" asp-route-productId="@item.IdProdus" style="display:inline;">
-                                <button type="submit" class="btn btn-danger">Sterge</button>
+                                <div class="btn-group" role="group">
+                                    <a asp-page="/DetaliiProdus" asp-route-id="@item.IdProdus" class="btn btn-sm btn-outline-secondary border-end-0" role="button">Detalii</a>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Șterge</button>
+                                </div>
                             </form>
                         </td>
                     </tr>
@@ -55,10 +58,10 @@
             </tbody>
         </table>
 
-        <form method="get" action="/DetaliiPlata">
-            <button type="submit" class="btn btn-primary">Trimite Comanda</button>
+        <form method="post" action="/DetaliiPlata">
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-outline-primary">Trimite Comanda - NEFUNCTIONAL</button>
+            </div>
         </form>
-
-
     }
 </div>

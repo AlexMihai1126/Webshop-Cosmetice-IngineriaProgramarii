@@ -16,12 +16,8 @@
     }
 }
 
-<div class="container">
+<div class="container-fluid">
     <h2 class="text-center mb-5">Vizualizare produs @Model.Produs.Nume</h2>
-    <hr />
-    <div class="d-grid gap-2 mb-4">
-        <a href="/Produse" class="btn btn-secondary w-100">Înapoi <i class="bi bi-arrow-left-square"></i></a>
-    </div>
     <hr />
 
     <div class="row align-items-center">
@@ -59,7 +55,7 @@
             @if (Model.Produs.Stoc <= 0)
             {
                 <div class="d-grid gap-2">
-                    <button class="btn btn-secondary" disabled aria-disabled="true">
+                    <button class="btn btn-outline-secondary" disabled aria-disabled="true">
                         Nu este pe stoc
                     </button>
                 </div>
@@ -69,9 +65,7 @@
                 <form method="post" asp-page-handler="AddToCart" asp-route-id="@Model.Produs.IdProdus">
                     <input type="hidden" name="quantity" value="1" />
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-info">
-                            Adaugă în coș <i class="bi bi-bag-plus"></i>
-                        </button>
+                        <button type="submit" class="btn btn-outline-primary">Adaugă în coș</button>
                     </div>
                 </form>
             }

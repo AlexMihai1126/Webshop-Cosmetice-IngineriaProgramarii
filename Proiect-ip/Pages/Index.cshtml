@@ -1,82 +1,84 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Prima pagină";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Bun venit la ARC Cosmetics</h1>
-</div>
-
-<div id="productSlideshow" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="4000">
-    <div class="carousel-inner">
-        @if (Model.ProduseSlideshow.Any())
-        {
-            int index = 0;
-            // Randomizează produsele
-            var produseRandomizate = Model.ProduseSlideshow
-            .OrderBy(x => Guid.NewGuid()) // Generare aleatorie pentru ordine
-            .Take(28) // Ia doar primele 8 produse aleatorii
-            .Select((produs, i) => new { produs, index = i })
-            .GroupBy(x => x.index / 4) // Grupa de câte 4 produse
-            .ToList();
-
-            foreach (var grup in produseRandomizate)
+<div class="container-fluid mt-4">
+    <div class="text-center">
+        <h2>Bun venit la ARC Cosmetics</h2>
+    </div>
+    <hr />
+    <div id="productSlideshow" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="4000">
+        <div class="carousel-inner">
+            @if (Model.ProduseSlideshow.Any())
             {
-                <div class="carousel-item @(index == 0 ? "active" : "")">
-                    <div class="row">
-                        @foreach (var item in grup)
-                        {
-                            <div class="col-12 col-sm-6 col-md-3 mb-4">
-                             
-                                <div class="card">
-                                    <div style="max-height: 350px; overflow: hidden;">
-                                        @await Html.PartialAsync("_ImageView", (item.produs.IdProdus, CssClass: "card-img-top"))
-                                    </div>
-                                    <div class="card-body">
-                                        <h4 class="card-title"
-                                            style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; min-height: 3.7rem;" title="@item.produs.Nume">
-                                            <strong>@item.produs.Nume</strong>
-                                        </h4>
-                                        <p class="card-text"><strong>Brand: </strong> @item.produs.Brand.NumeBrand</p>
-                                        <p class="card-text"><strong>Preț: </strong> @(item.produs.Pret) RON</p>
-                                        <div class="d-grid gap-2">
-                                       
-                                        <a class="btn btn-secondary" asp-page="/DetaliiProdus" asp-route-id="@item.produs.IdProdus">Vezi detalii <i class="bi bi-arrow-up-right-square"></i></a>
+                int index = 0;
+                // Randomizează produsele
+                var produseRandomizate = Model.ProduseSlideshow
+                .OrderBy(x => Guid.NewGuid()) // Generare aleatorie pentru ordine
+                .Take(28) // Ia doar primele 8 produse aleatorii
+                .Select((produs, i) => new { produs, index = i })
+                .GroupBy(x => x.index / 4) // Grupa de câte 4 produse
+                .ToList();
+
+                foreach (var grup in produseRandomizate)
+                {
+                    <div class="carousel-item @(index == 0 ? "active" : "")">
+                        <div class="row">
+                            @foreach (var item in grup)
+                            {
+                                <div class="col-12 col-sm-6 col-md-3 mb-4">
+
+                                    <div class="card">
+                                        <div style="max-height: 350px; overflow: hidden;">
+                                            @await Html.PartialAsync("_ImageView", (item.produs.IdProdus, CssClass: "card-img-top"))
+                                        </div>
+                                        <div class="card-body">
+                                            <h4 class="card-title"
+                                                style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; min-height: 3.7rem;" title="@item.produs.Nume">
+                                                <strong>@item.produs.Nume</strong>
+                                            </h4>
+                                            <p class="card-text"><strong>Brand: </strong> @item.produs.Brand.NumeBrand</p>
+                                            <p class="card-text"><strong>Preț: </strong> @(item.produs.Pret) RON</p>
+                                            <div class="d-grid gap-2">
+                                                <a role="button" class="btn btn-outline-secondary" asp-page="/DetaliiProdus" asp-route-id="@item.produs.IdProdus">Vezi detalii</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
-                </div>
-                index++;
+                    index++;
+                }
             }
-        }
-        else
-        {
-            <div class="carousel-item active">
-                <div class="card" style="width: 18rem;">
-                    <div style="max-height: 250px; overflow: hidden;">
-                        <img src="/images/no-image.png" class="card-img-top" alt="No Products" style="object-fit: cover;">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Fără produse disponibile</h5>
-                        <p class="card-text">Momentan nu există produse în baza de date.</p>
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="card" style="width: 18rem;">
+                        <div style="max-height: 250px; overflow: hidden;">
+                            <img src="/images/no-image.png" class="card-img-top" alt="No Products" style="object-fit: cover;">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Fără produse disponibile</h5>
+                            <p class="card-text">Momentan nu există produse în baza de date.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#productSlideshow" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#productSlideshow" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#productSlideshow" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#productSlideshow" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
 </div>
+
 
 
 

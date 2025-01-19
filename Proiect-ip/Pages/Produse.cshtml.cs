@@ -125,7 +125,7 @@ namespace Proiect_ip.Pages
                 TempData["SuccessMessage"] = "Produsul a fost adăugat în coș!";
                 return RedirectToPage("/Cos");
             }
-            catch (InvalidOperationException)
+            catch (Exception)
             {
                 TempData["ErrorMessage"] = "Produsul nu poate fi adăugat în coș!";
                 return RedirectToPage("Produse");

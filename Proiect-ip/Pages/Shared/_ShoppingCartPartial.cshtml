@@ -13,9 +13,7 @@
     var (suma, nrprod) = await CartService.GetCartDataAsync(user.Id);
     <ul class="navbar-nav">
         <li class="nav-item dropdown">
-            <a class="nav-link text-dark" asp-page="/Cos" id="cartDropdown">
-                Coș cumpărături
-            </a>
+            <a class="nav-link text-dark" asp-page="/Cos" id="cartDropdown">Coș cumpărături</a>
             <ul class="dropdown-menu p-3" aria-labelledby="cartDropdown" id="cartInfo" style="display:none;">
                 <li>
                     <p id="cartSum">Total: @suma RON</p>

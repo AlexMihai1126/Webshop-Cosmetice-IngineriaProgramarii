@@ -8,6 +8,7 @@
 
 <div class="container">
     <h2 class="text-center mb-5">Editare produs</h2>
+    <hr />
     <form method="post" enctype="multipart/form-data">
 
         <div class="mb-3 row">
@@ -61,7 +62,7 @@
         </div>
 
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" title="Pentru a salva imaginea, trebuie sa fie apasat butonul de Update Imagine.">Imagine noua (*)</label>
+            <label class="col-sm-4 col-form-label" title="Pentru a salva imaginea, trebuie sa fie apasat butonul de Update Imagine.">Imagine nouă (*)</label>
             <div class="col-sm-8">
                 <input class="form-control" type="file" asp-for="ProdusDto.Image" accept="image/png, image/jpeg" />
                 <span asp-validation-for="ProdusDto.Image" class="text-danger"></span>
@@ -69,11 +70,11 @@
         </div>
 
         <div class="mb-3 row">
-            <div class="d-grid gap-2">
+            <div class="btn-group" role="group">
                 <input class="btn-check" type="checkbox" asp-for="UpdateImagine" id="updateImagineCheckbox" />
-                <label class="btn btn-outline-info" for="updateImagineCheckbox">Update Imagine</label>
-                <button type="submit" class="btn btn-success">Salveaza</button>
-                <a class="btn btn-danger" href="/Admin/Produse/Overview" role="button">Anuleaza</a>
+                <label class="btn btn-outline-secondary" for="updateImagineCheckbox">Update Imagine</label>
+                <button type="submit" class="btn btn-outline-success">Salvează</button>
+                <button type="button" class="btn btn-outline-danger" onclick="window.location.href='/Admin/Produse/Overview'">Anulează</button>
             </div>
         </div>
 

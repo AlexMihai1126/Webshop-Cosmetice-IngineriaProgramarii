@@ -11,10 +11,10 @@
     <hr />
 
     <div class="d-grid gap-2">
-        <a class='btn btn-success' href='/Admin/Categorii/Creare'>Categorie nouă</a>
+        <button type="button" class='btn btn-outline-secondary' onclick="window.location.href='/Admin/Categorii/Creare'">Categorie nouă</button>
     </div>
 
-    <hr />
+    <br />
     @if (Model.Categorii.Count() == 0)
     {
         <div class="alert alert-danger" role="alert">
@@ -42,13 +42,14 @@
                         <td>@cat.NumeCateg</td>
                         <td>@cat.Descriere</td>
                         <td style="white-space:nowrap">
-                            <button type="button" class="btn btn-sm btn-success" onclick="window.location.href='/Admin/Categorii/Edit?id=@cat.Id'">Modifică</button>
-                            <button type="button" class="btn btn-sm btn-danger" onclick="window.location.href='/Admin/Categorii/Stergere?id=@cat.Id'">Șterge</button>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-sm btn-outline-primary border-end-0" onclick="window.location.href='/Admin/Categorii/Edit?id=@cat.Id'">Modifică</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="window.location.href='/Admin/Categorii/Stergere?id=@cat.Id'">Șterge</button>
+                            </div>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     }
-
 </div>
