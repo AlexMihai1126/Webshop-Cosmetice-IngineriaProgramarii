@@ -142,7 +142,7 @@ namespace Proiect_ip.Services
                 DataComanda = DateTime.UtcNow,
                 PretTotal = total,
                 PuncteGenerate = (int)total, //momentan 1 leu = 1 punct
-                Status = Comanda.ComandaStatus.InProcesare
+                CStatus = Comanda.ComandaStatus.InProcesare
             };
 
             _context.Comenzi.Add(comandaNoua);
@@ -200,7 +200,7 @@ namespace Proiect_ip.Services
                 DataComanda = DateTime.UtcNow,
                 PretTotal = total,
                 PuncteGenerate = (int)total, //momentan 1 leu = 1 punct
-                Status = Comanda.ComandaStatus.InProcesare
+                CStatus = Comanda.ComandaStatus.InProcesare
             };
 
             _context.Comenzi.Add(comandaNoua);

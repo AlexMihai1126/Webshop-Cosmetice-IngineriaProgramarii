@@ -20,7 +20,7 @@ public class OrdersManagerService(Proiect_ipContext context, PointsService point
 
         if(statusFilter != Comanda.ComandaStatus.Toate)
         {
-            query = query.Where(c => c.Status == statusFilter);
+            query = query.Where(c => c.CStatus == statusFilter);
             //Filtrare dupa status
         }
 
@@ -33,7 +33,7 @@ public class OrdersManagerService(Proiect_ipContext context, PointsService point
         if (comanda == null)
             throw new InvalidOperationException("Order not found");
 
-        comanda.Status = newStatus;
+        comanda.CStatus = newStatus;
         context.Comenzi.Update(comanda);
         await context.SaveChangesAsync();
     }//Adminul poate schimba statusul unei comenzi
@@ -54,10 +54,10 @@ public class OrdersManagerService(Proiect_ipContext context, PointsService point
         if (comanda == null || comanda.Proiect_ipUserID != userId)
             throw new InvalidOperationException("Order not found or not authorized");
 
-        if (comanda.Status != Comanda.ComandaStatus.InProcesare)
+        if (comanda.CStatus != Comanda.ComandaStatus.InProcesare)
             throw new InvalidOperationException("Cannot cancel this order");
 
-        comanda.Status = Comanda.ComandaStatus.Anulat;
+        comanda.CStatus = Comanda.ComandaStatus.Anulat;
         context.Comenzi.Update(comanda);
         await context.SaveChangesAsync();
     }//Clientul isi poate anula singur comanda
@@ -68,7 +68,7 @@ public class OrdersManagerService(Proiect_ipContext context, PointsService point
         if (comanda == null || comanda.Proiect_ipUserID != userId)
             throw new InvalidOperationException("Comanda negasita sau utilizatorul nu are acces.");
 
-        if (comanda.Status != Comanda.ComandaStatus.InProcesare)
+        if (comanda.CStatus != Comanda.ComandaStatus.InProcesare)
             throw new InvalidOperationException("Nu se mai pot adauga reduceri dupa faza de procesare.");
 
         var puncteUtilizator = await pointsService.GetPointsAsync(userId);

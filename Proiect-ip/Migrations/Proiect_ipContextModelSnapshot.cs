@@ -280,8 +280,16 @@ namespace Proiect_ip.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdComanda"));
 
+                    b.Property<string>("CStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DataComanda")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("PStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PretTotal")
                         .HasColumnType("decimal(18,2)");
@@ -292,10 +300,6 @@ namespace Proiect_ip.Migrations
 
                     b.Property<int>("PuncteGenerate")
                         .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdComanda");
 
@@ -379,9 +383,6 @@ namespace Proiect_ip.Migrations
                     b.Property<int?>("IdCategorie")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdVoucher")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("ImageData")
                         .HasColumnType("varbinary(max)");
 
@@ -404,12 +405,10 @@ namespace Proiect_ip.Migrations
 
                     b.HasIndex("IdCategorie");
 
-                    b.HasIndex("IdVoucher");
-
                     b.ToTable("Produse");
                 });
 
-            modelBuilder.Entity("Proiect_ip.Models.Voucher", b =>
+            modelBuilder.Entity("Proiect_ip.Models.UserMetrics", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -417,22 +416,29 @@ namespace Proiect_ip.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Cod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("CheltuieliTotale")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(10, 2)")
+                        .HasDefaultValue(0.0m);
 
-                    b.Property<DateTime>("DataExpirare")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Nivel")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Proiect_ipUserID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("UltimaActualizareNivel")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Proiect_ipUserID");
+                    b.HasIndex("Proiect_ipUserID")
+                        .IsUnique();
 
-                    b.ToTable("Vouchere");
+                    b.ToTable("UserMetrics");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -491,7 +497,7 @@ namespace Proiect_ip.Migrations
                     b.HasOne("Proiect_ip.Areas.Identity.Data.Proiect_ipUser", "Utilizator")
                         .WithMany("Comenzi")
                         .HasForeignKey("Proiect_ipUserID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Utilizator");
@@ -520,13 +526,12 @@ namespace Proiect_ip.Migrations
                 {
                     b.HasOne("Proiect_ip.Models.Comanda", "Comanda")
                         .WithMany()
-                        .HasForeignKey("IdComanda")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("IdComanda");
 
                     b.HasOne("Proiect_ip.Areas.Identity.Data.Proiect_ipUser", "User")
                         .WithMany("IstoricPuncte")
                         .HasForeignKey("Proiect_ipUserID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Comanda");
@@ -547,27 +552,20 @@ namespace Proiect_ip.Migrations
                         .HasForeignKey("IdCategorie")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Proiect_ip.Models.Voucher", "Voucher")
-                        .WithMany("Produse")
-                        .HasForeignKey("IdVoucher")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("Brand");
 
                     b.Navigation("Categorie");
-
-                    b.Navigation("Voucher");
                 });
 
-            modelBuilder.Entity("Proiect_ip.Models.Voucher", b =>
+            modelBuilder.Entity("Proiect_ip.Models.UserMetrics", b =>
                 {
-                    b.HasOne("Proiect_ip.Areas.Identity.Data.Proiect_ipUser", "CreatDe")
-                        .WithMany("Vouchere")
-                        .HasForeignKey("Proiect_ipUserID")
+                    b.HasOne("Proiect_ip.Areas.Identity.Data.Proiect_ipUser", "Utilizator")
+                        .WithOne("UserMetrics")
+                        .HasForeignKey("Proiect_ip.Models.UserMetrics", "Proiect_ipUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatDe");
+                    b.Navigation("Utilizator");
                 });
 
             modelBuilder.Entity("Proiect_ip.Areas.Identity.Data.Proiect_ipUser", b =>
@@ -576,7 +574,8 @@ namespace Proiect_ip.Migrations
 
                     b.Navigation("IstoricPuncte");
 
-                    b.Navigation("Vouchere");
+                    b.Navigation("UserMetrics")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Proiect_ip.Models.Brand", b =>
@@ -597,11 +596,6 @@ namespace Proiect_ip.Migrations
             modelBuilder.Entity("Proiect_ip.Models.Produs", b =>
                 {
                     b.Navigation("ComandaProduse");
-                });
-
-            modelBuilder.Entity("Proiect_ip.Models.Voucher", b =>
-                {
-                    b.Navigation("Produse");
                 });
 #pragma warning restore 612, 618
         }

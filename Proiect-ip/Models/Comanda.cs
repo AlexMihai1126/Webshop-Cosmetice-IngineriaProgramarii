@@ -12,6 +12,15 @@ namespace Proiect_ip.Models
             Confirmata = 3,
             Expediata = 4
         }
+
+        public enum PlataStatus
+        {
+            Toate = 0,
+            InProcesare = 1,
+            Acceptata = 2,
+            Anulata = 3,
+            Numerar = 4
+        }
         public int IdComanda { get; set; }
         public string Proiect_ipUserID { get; set; }
         public DateTime DataComanda { get; set; }
@@ -20,7 +29,8 @@ namespace Proiect_ip.Models
         public int PuncteGenerate { get; set; }
 
         //Navigation properties
-        public ComandaStatus Status { get; set; }
+        public ComandaStatus CStatus { get; set; }
+        public PlataStatus PStatus { get; set; }
         public Proiect_ipUser Utilizator { get; set; }
         public ICollection<ComandaProdus> ComandaProduse { get; set; }
         public ICollection<Produs> Produse { get; set; }

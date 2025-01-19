@@ -52,12 +52,12 @@ else
                         <td>@counter</td>
                         <td>@order.Utilizator.Email</td>
                         <td>@order.DataComanda.ToShortDateString()</td>
-                        <td>@order.Status</td>
+                        <td>@order.CStatus</td>
                         <td>@order.PretTotal.ToString() Lei</td>
                         <td>
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-outline-primary btn-sm border-0" data-bs-toggle="modal" data-bs-target="#orderDetailsModal-@order.IdComanda">Vizualizare</button>
-                                @if (order.Status == Proiect_ip.Models.Comanda.ComandaStatus.InProcesare)
+                                @if (order.CStatus == Proiect_ip.Models.Comanda.ComandaStatus.InProcesare)
                                 {
                                     <form method="post" asp-page-handler="CancelOrder">
                                         <input type="hidden" name="orderId" value="@order.IdComanda" />
@@ -68,7 +68,7 @@ else
                                         <button type="submit" class="btn btn-outline-info btn-sm border-0">Confirmare</button>
                                     </form>
                                 }
-                                @if (order.Status == Proiect_ip.Models.Comanda.ComandaStatus.Confirmata)
+                                @if (order.CStatus == Proiect_ip.Models.Comanda.ComandaStatus.Confirmata)
                                 {
                                     <form method="post" asp-page-handler="SendOrder">
                                         <input type="hidden" name="orderId" value="@order.IdComanda" />
@@ -119,7 +119,7 @@ else
                             <hr />
                             <p>Pret total: @order.PretTotal</p>
                             <hr />
-                            <p>Status: @order.Status</p>
+                            <p>Status: @order.CStatus</p>
                             <hr />
                             <p>Nume si prenume client: @order.Utilizator.Nume @order.Utilizator.Prenume</p>
                             <p>Email client: @order.Utilizator.Email</p>

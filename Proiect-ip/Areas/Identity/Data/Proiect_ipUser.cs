@@ -17,7 +17,8 @@ public class Proiect_ipUser : IdentityUser
     public string Prenume { get; set; }
     public string? Adresa { get; set; }
     public ICollection<Comanda> Comenzi { get; set; }
-    public ICollection<Voucher> Vouchere { get; set; }
     public ICollection<IstoricPuncte> IstoricPuncte { get;set; }
+    public UserMetrics UserMetrics { get; set; }
+
 }
 
