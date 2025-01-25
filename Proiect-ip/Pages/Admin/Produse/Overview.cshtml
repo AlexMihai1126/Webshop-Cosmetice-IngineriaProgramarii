@@ -1,6 +1,7 @@
 ﻿@page
 @model Proiect_ip.Pages.Admin.Produse.ProduseModel
 @using Microsoft.AspNetCore.Authorization
+@using Proiect_ip.Models.DataExtensions
 @attribute [Authorize(Roles = "Admin")]
 @{
     ViewData["Title"] = "Admin Produse";
@@ -29,7 +30,9 @@
                     <th>Brand</th>
                     <th>Nume</th>
                     <th>Descriere</th>
-                    <th>Pret</th>
+                    <th>Pret initial (LEI)</th>
+                    <th>Reducere (%)</th>
+                    <th>Pret redus (LEI)</th>
                     <th>Categorie</th>
                     <th>Stoc</th>
                     <th>Imagine</th>
@@ -39,13 +42,18 @@
             <tbody class="table-group-divider">
                 @foreach (var produs in Model.Produs)
                 {
+                    decimal pret = produs.Pret;
+                    decimal reducere = produs.Reducere;
+                    decimal pretRedus = pret - (pret * (reducere / 100m));
                     <tr>
                         <td>@produs.Brand.NumeBrand</td>
                         <td>@produs.Nume</td>
                         <td>
                             <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#prodDescModal-@produs.IdProdus">Descriere</button>
                         </td>
-                        <td>@(produs.Pret) RON</td>
+                        <td>@(pret.TruncateTo(2))</td>
+                        <td>@(reducere)</td>
+                        <td>@(pretRedus.TruncateTo(2))</td>
                         <td>
                             @if (produs.Categorie != null)
                             {

@@ -5,21 +5,23 @@ namespace Proiect_ip.Models.DTO
 {
     public class ProdusDto
     {
-        [Required(ErrorMessage = "Nume is required")]
+        [Required(ErrorMessage = "Nume este obligatoriu")]
         public string Nume { get; set; }
-        [Required(ErrorMessage = "Brand is required")]
+        [Required(ErrorMessage = "Brand este obligatoriu")]
         public int BrandId { get; set; }
 
-        [Required(ErrorMessage = "Descriere is required")]
+        [Required(ErrorMessage = "Descriere este obligatoriu")]
         public string Descriere { get; set; }
 
-        [Required(ErrorMessage = "Pret is required")]
+        [Required(ErrorMessage = "Pret este obligatoriu")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Pret must be greater than zero")]
         public decimal Pret { get; set; }
 
-        [Required(ErrorMessage = "Stoc is required")]
-        [Range(0, int.MaxValue, ErrorMessage = "Stoc must be a non-negative number")]
+        [Required(ErrorMessage = "Stoc este obligatoriu")]
+        [Range(0, int.MaxValue, ErrorMessage = "Stoc >= 0")]
         public int Stoc { get; set; }
+        [Range(0, 90, ErrorMessage = "Reducerea trebuie sa fie intre 0 si 90.")]
+        public int Reducere { get; set; }
 
         public int? CategorieId { get; set; }
 

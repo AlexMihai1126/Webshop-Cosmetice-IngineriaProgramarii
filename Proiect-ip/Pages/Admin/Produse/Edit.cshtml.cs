@@ -46,6 +46,7 @@ namespace Proiect_ip.Pages.Admin.Produse
             ProdusDto.BrandId = produs.IdBrand;
             ProdusDto.Descriere = produs.Descriere;
             ProdusDto.Pret = produs.Pret;
+            ProdusDto.Reducere = produs.Reducere;
             ProdusDto.Stoc = produs.Stoc;
             ProdusDto.CategorieId = produs.IdCategorie;
             Produs = produs;
@@ -96,6 +97,7 @@ namespace Proiect_ip.Pages.Admin.Produse
             produs.IdBrand = ProdusDto.BrandId;
             produs.Descriere = ProdusDto.Descriere;
             produs.Pret = ProdusDto.Pret;
+            produs.Reducere = ProdusDto.Reducere;
             produs.Stoc = ProdusDto.Stoc;
             produs.IdCategorie = ProdusDto.CategorieId;
             await context.SaveChangesAsync();
