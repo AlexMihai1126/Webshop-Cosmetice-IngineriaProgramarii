@@ -14,11 +14,9 @@
     <ul class="navbar-nav">
         <li class="nav-item dropdown">
             <a class="nav-link text-dark" asp-page="/Cos" id="cartDropdown">Coș cumpărături</a>
-            <ul class="dropdown-menu p-3" aria-labelledby="cartDropdown" id="cartInfo" style="display:none;">
-                <li>
-                    <p id="cartSum">Total: @suma RON</p>
-                    <p id="cartCount">Produse: @nrprod</p>
-                </li>
+            <ul class="dropdown-menu m-0 text-center" aria-labelledby="cartDropdown" id="cartInfo" style="display:none;">
+                <li>Produse: @nrprod</li>
+                <li>@suma LEI</li>
             </ul>
         </li>
     </ul>

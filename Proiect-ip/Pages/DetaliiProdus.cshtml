@@ -1,5 +1,6 @@
 ﻿@page
 @model Proiect_ip.Pages.ViewProdusModel
+@using Proiect_ip.Models.DataExtensions
 @{
     ViewData["Title"] = "Detalii produs";
 }
@@ -51,7 +52,21 @@
                     </p>
                 </li>
             </ul>
-            <h4 class="mt-3">Preț: <strong>@Model.Produs.Pret LEI</strong></h4>
+            <h4 class="mt-3">
+                @if (Model.Produs.Reducere != 0)
+                {
+                    <span style="text-decoration: line-through; color: red;">
+                        @Model.Produs.Pret.TruncateTo(2) LEI
+                    </span>
+                    decimal pretNou = Model.Produs.Pret - (Model.Produs.Pret * (Model.Produs.Reducere / 100m));
+                    <strong>@pretNou.TruncateTo(2) LEI</strong>
+                }
+                else
+                {
+                    <strong>@Model.Produs.Pret.TruncateTo(2) LEI</strong>
+                }
+            </h4>
+
             @if (Model.Produs.Stoc <= 0)
             {
                 <div class="d-grid gap-2">

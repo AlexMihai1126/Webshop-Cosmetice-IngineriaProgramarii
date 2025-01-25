@@ -42,17 +42,15 @@
             <tbody class="table-group-divider">
                 @foreach (var produs in Model.Produs)
                 {
-                    decimal pret = produs.Pret;
-                    decimal reducere = produs.Reducere;
-                    decimal pretRedus = pret - (pret * (reducere / 100m));
+                    decimal pretRedus = produs.Pret - (produs.Pret * (produs.Reducere / 100m));
                     <tr>
                         <td>@produs.Brand.NumeBrand</td>
                         <td>@produs.Nume</td>
                         <td>
                             <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#prodDescModal-@produs.IdProdus">Descriere</button>
                         </td>
-                        <td>@(pret.TruncateTo(2))</td>
-                        <td>@(reducere)</td>
+                        <td>@(produs.Pret.TruncateTo(2))</td>
+                        <td>@(produs.Reducere)</td>
                         <td>@(pretRedus.TruncateTo(2))</td>
                         <td>
                             @if (produs.Categorie != null)

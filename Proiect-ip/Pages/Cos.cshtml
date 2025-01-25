@@ -1,5 +1,6 @@
 ﻿@page
 @model Proiect_ip.Pages.CosModel
+@using Proiect_ip.Models.DataExtensions
 @{
     ViewData["Title"] = "Coșul de cumpărături";
 }
@@ -27,7 +28,9 @@
             <thead>
                 <tr>
                     <th>Produs</th>
+                    <th>Preț/buc</th>
                     <th>Cantitate</th>
+                    <th>Total</th>
                     <th>Actiuni</th>
                 </tr>
             </thead>
@@ -35,8 +38,10 @@
                 @foreach (var item in Model.ProduseCos)
                 {
                     var cantitate = Model.Produse.Find(p => p.ProductId == item.IdProdus).Cantitate;
+                    decimal pretUnit = item.Pret - (item.Pret * (item.Reducere / 100m));
                     <tr>
                         <td>@item.Nume</td>
+                        <td>@pretUnit.TruncateTo(2) LEI</td>
                         <td>
                             <form method="post" asp-page-handler="UpdateQuantity" asp-route-productId="@item.IdProdus" class="d-flex">
                                 <div class="input-group input-group-sm">
@@ -45,6 +50,7 @@
                                 </div>
                             </form>
                         </td>
+                        <td>@(pretUnit.TruncateTo(2) * cantitate) LEI</td>
                         <td>
                             <form method="post" asp-page-handler="RemoveFromCart" asp-route-productId="@item.IdProdus" style="display:inline;">
                                 <div class="btn-group" role="group">
@@ -57,6 +63,8 @@
                 }
             </tbody>
         </table>
+        
+        <h4>Totalul produselor din coș este de: @(Model.TotalCos) LEI</h4>
 
         <form method="post" action="/DetaliiPlata">
             <div class="d-grid gap-2">

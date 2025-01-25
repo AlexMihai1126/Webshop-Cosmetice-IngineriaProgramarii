@@ -79,7 +79,7 @@ namespace Proiect_ip.Pages
 
             try
             {
-                idComanda = await _cartService.PlaceOrder2Async(user.Id);
+                idComanda = await _cartService.PlaceOrderAsync(user.Id);
             }
             catch (Exception)
             {

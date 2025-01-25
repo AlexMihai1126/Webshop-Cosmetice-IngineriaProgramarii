@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,10 +17,15 @@ namespace Proiect_ip.Pages
     {
         public List<(int ProductId, int Cantitate)> Produse { get; set; }
         public List<Produs> ProduseCos { get; set; } = [];
+        public decimal TotalCos { get; set; }
+        public int TotalProduse { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await userManager.GetUserAsync(User);
             var userId = user.Id;
+            var (suma, nrProd) = await cartService.GetCartDataAsync(user.Id);
+            TotalCos = suma;
+            TotalProduse = nrProd;
             Produse = await cartService.GetProductsAsync(userId);
             foreach (var product in Produse)
             {

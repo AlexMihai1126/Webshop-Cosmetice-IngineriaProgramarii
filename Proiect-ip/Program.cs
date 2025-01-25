@@ -10,7 +10,7 @@ var connectionString = builder.Configuration.GetConnectionString("Proiect_ipCont
 
 builder.Services.AddDbContext<Proiect_ipContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<Proiect_ipUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<Proiect_ipUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>() // folosire roluri
     .AddEntityFrameworkStores<Proiect_ipContext>();
 
