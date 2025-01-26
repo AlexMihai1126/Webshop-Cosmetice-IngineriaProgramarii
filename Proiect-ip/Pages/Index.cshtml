@@ -1,5 +1,6 @@
 ﻿@page
 @model IndexModel
+@using Proiect_ip.Models.DataExtensions
 @{
     ViewData["Title"] = "Prima pagină";
 }
@@ -40,7 +41,21 @@
                                                 <strong>@item.produs.Nume</strong>
                                             </h4>
                                             <p class="card-text"><strong>Brand: </strong> @item.produs.Brand.NumeBrand</p>
-                                            <p class="card-text"><strong>Preț: </strong> @(item.produs.Pret) RON</p>
+                                            <p class="card-text">
+                                                <strong>Preț: </strong>
+                                                @if (item.produs.Reducere != 0)
+                                                {
+                                                    <span style="text-decoration: line-through; color: red;">
+                                                        @item.produs.Pret.TruncateTo(2) RON
+                                                    </span>
+                                                    decimal pretNou = item.produs.Pret - (item.produs.Pret * (item.produs.Reducere / 100m));
+                                                    <strong>@pretNou.TruncateTo(2) LEI</strong>
+                                                }
+                                                else
+                                                {
+                                                    <strong>@item.produs.Pret.TruncateTo(2) LEI</strong>
+                                                }
+                                            </p>
                                             <div class="d-grid gap-2">
                                                 <a role="button" class="btn btn-outline-secondary" asp-page="/DetaliiProdus" asp-route-id="@item.produs.IdProdus">Vezi detalii</a>
                                             </div>

@@ -21,12 +21,18 @@ namespace Proiect_ip.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            ProduseSlideshow = await _context.Produse
+            // Filtrează produsele care au reducere diferită de 0
+            var produseCuReducere = await _context.Produse
                 .Include(p => p.Categorie)
                 .Include(p => p.Brand)
+                .Where(p => p.Reducere != 0) // Filtrează doar produsele cu reducere
+                .ToListAsync();
+
+            // Alege aleatoriu 28 de produse din lista filtrată
+            ProduseSlideshow = produseCuReducere
                 .OrderBy(x => Guid.NewGuid())
                 .Take(28)
-                .ToListAsync();
+                .ToList();
 
             return Page();
         }
