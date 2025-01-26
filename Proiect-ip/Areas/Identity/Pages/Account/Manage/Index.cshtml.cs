@@ -57,7 +57,7 @@ namespace Proiect_ip.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Număr de telefon")]
             public string PhoneNumber { get; set; }
         }
 
@@ -112,7 +112,7 @@ namespace Proiect_ip.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Profil actualizat";
             return RedirectToPage();
         }
     }

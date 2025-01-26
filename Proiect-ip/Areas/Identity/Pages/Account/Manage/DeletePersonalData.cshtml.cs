@@ -82,7 +82,7 @@ namespace Proiect_ip.Areas.Identity.Pages.Account.Manage
             {
                 if (!await _userManager.CheckPasswordAsync(user, Input.Password))
                 {
-                    ModelState.AddModelError(string.Empty, "Incorrect password.");
+                    ModelState.AddModelError(string.Empty, "Parolă greșită.");
                     return Page();
                 }
             }

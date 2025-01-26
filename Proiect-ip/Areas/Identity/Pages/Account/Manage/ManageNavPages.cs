@@ -61,6 +61,11 @@ namespace  Proiect_ip.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
+        public static string MyOrders => "MyOrders";
+        public static string ViewMyOrders(ViewContext viewContext) => PageNavClass(viewContext, MyOrders);
+        public static string ViewRewards => "ViewRewards";
+        public static string ViewMyRewards(ViewContext viewContext) => PageNavClass(viewContext, ViewRewards);
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.

@@ -75,19 +75,15 @@ namespace Proiect_ip.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            
-            [Required]
-            [Display(Name = "Nume")]
-            public string Nume { get; set; }
-
-            [Required]
-            [Display(Name = "Prenume")]
-            public string Prenume { get; set; }
 
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+
+            [Required]
+            [Display(Name ="Username")]
+            public string Username { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -96,7 +92,7 @@ namespace Proiect_ip.Areas.Identity.Pages.Account
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Parolă")]
             public string Password { get; set; }
 
             /// <summary>
@@ -104,8 +100,8 @@ namespace Proiect_ip.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Confirmă parolă")]
+            [Compare("Password", ErrorMessage = "Parolele nu se potrivesc.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -123,11 +119,9 @@ namespace Proiect_ip.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.EmailConfirmed = true;
 
-                user.Nume = Input.Nume;
-                user.Prenume = Input.Prenume;
-
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

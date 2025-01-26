@@ -2,14 +2,7 @@
 @{
 }
 <ul class="nav nav-pills flex-column">
-    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profil</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Email</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Parola</a></li>
-    <li class="nav-item">
-        <a class="nav-link @(ViewData["ActivePage"] as string == "MyOrders" ? "active" : "")" asp-page="/Account/Manage/MyOrders">Comenzile mele</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link @(ViewData["ActivePage"] as string == "ViewRewards" ? "active" : "")" asp-page="/Account/Manage/ViewRewards">Vezi recompense</a>
-    </li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Date personale</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.ViewMyOrders(ViewContext)" id="my-orders" asp-page="./MyOrders">Comenzile mele</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.ViewMyRewards(ViewContext)" id="my-rewards" asp-page="./ViewRewards">Recompensele mele</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Ștergere cont</a></li>
 </ul>
