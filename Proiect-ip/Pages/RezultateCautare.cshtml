@@ -30,14 +30,14 @@
                                         @if (produs.Reducere != 0)
                                         {
                                             <span style="text-decoration: line-through; color: red;">
-                                                @produs.Pret.TruncateTo(2) RON
+                                                @produs.Pret.TruncateTo(2) LEI
                                             </span>
                                             decimal pretNou = produs.Pret - (produs.Pret * (produs.Reducere / 100m));
-                                            <strong>@pretNou.TruncateTo(2) RON</strong>
+                                            <strong>@pretNou.TruncateTo(2) LEI</strong>
                                         }
                                         else
                                         {
-                                            <strong>@produs.Pret.TruncateTo(2) RON</strong>
+                                            <strong>@produs.Pret.TruncateTo(2) LEI</strong>
                                         }
                                     </p>
                                 </li>

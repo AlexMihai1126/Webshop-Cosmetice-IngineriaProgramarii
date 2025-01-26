@@ -46,7 +46,7 @@
                                                 @if (item.produs.Reducere != 0)
                                                 {
                                                     <span style="text-decoration: line-through; color: red;">
-                                                        @item.produs.Pret.TruncateTo(2) RON
+                                                        @item.produs.Pret.TruncateTo(2) LEI
                                                     </span>
                                                     decimal pretNou = item.produs.Pret - (item.produs.Pret * (item.produs.Reducere / 100m));
                                                     <strong>@pretNou.TruncateTo(2) LEI</strong>
