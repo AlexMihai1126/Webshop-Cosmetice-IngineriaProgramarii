@@ -1,0 +1,77 @@
+﻿@page
+@model Proiect_ip.Pages.PlataModel
+@{
+    ViewData["Title"] = "Detalii Plată";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+
+    <form method="post">
+        <input type="hidden" asp-for="Input.IdComanda" />
+
+        <div class="mb-3">
+            <label asp-for="Input.Destinatar" class="form-label"></label>
+            <input asp-for="Input.Destinatar" class="form-control" />
+            <span asp-validation-for="Input.Destinatar" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.Telefon" class="form-label"></label>
+            <input asp-for="Input.Telefon" class="form-control" />
+            <span asp-validation-for="Input.Telefon" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.Adresa" class="form-label"></label>
+            <input asp-for="Input.Adresa" class="form-control" />
+            <span asp-validation-for="Input.Adresa" class="text-danger"></span>
+        </div>
+
+        <!-- Payment Options -->
+        <div class="mb-3">
+            <label class="form-label">Metoda de Plată</label>
+            <div>
+                <input type="radio" id="numerar" name="PaymentMethod" value="Numerar" checked
+                       onchange="toggleCardForm(false)" />
+                <label for="numerar">Numerar (Cash Payment)</label>
+            </div>
+            <div>
+                <input type="radio" id="card" name="PaymentMethod" value="Card"
+                       onchange="toggleCardForm(true)" />
+                <label for="card">Card (Credit/Debit Payment)</label>
+            </div>
+        </div>
+
+        <!-- Card Details Form (Initially Hidden) -->
+        <div id="card-details" class="mb-3" style="display: none;">
+            <label class="form-label">Card Details</label>
+            <div>
+                <input type="text" class="form-control mb-2" placeholder="Card Number" />
+                <input type="text" class="form-control mb-2" placeholder="Cardholder Name" />
+                <input type="text" class="form-control mb-2" placeholder="Expiration Date (MM/YY)" />
+                <input type="text" class="form-control mb-2" placeholder="CVV" />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Confirmă Plată</button>
+    </form>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success mt-3">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Toggle visibility of card form
+        function toggleCardForm(show) {
+            const cardDetails = document.getElementById('card-details');
+            cardDetails.style.display = show ? 'block' : 'none';
+        }
+    </script>
+}

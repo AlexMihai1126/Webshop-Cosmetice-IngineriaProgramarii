@@ -1,4 +1,5 @@
 ﻿using Proiect_ip.Areas.Identity.Data;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Proiect_ip.Models
 {
@@ -30,6 +31,12 @@ namespace Proiect_ip.Models
         public decimal Reducere { get; set; }
         public int PuncteGenerate { get; set; }
         public int PuncteUtilizate { get; set; }
+        [Required]
+        public string Destinatar { get; set; }
+        [Required]
+        public string Telefon { get; set; }
+        [Required]
+        public string Adresa { get; set; }
 
         //Navigation properties
         public ComandaStatus CStatus { get; set; }

@@ -165,6 +165,9 @@ namespace Proiect_ip.Services
                 PuncteGenerate = 0, // se pune 0, punctele se vor adauga dupa confirmarea comenzii
                 PuncteUtilizate = 0,
                 Reducere = 0.0m,
+                Destinatar = "",
+                Telefon = "",
+                Adresa = "",
                 CStatus = Comanda.ComandaStatus.InProcesare,
                 PStatus = Comanda.PlataStatus.InProcesare
             };

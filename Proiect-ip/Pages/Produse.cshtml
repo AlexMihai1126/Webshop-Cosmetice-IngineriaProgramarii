@@ -196,10 +196,9 @@
             @for (int i = 1; i <= Model.TotalPages; i++)
             {
                 <li class="page-item @(i == Model.PageIndex ? "active" : "")">
-                    <a class="page-link" href="@Url.Page("/Produse", new { PageIndex = i, categorie = Model.CategorieId, Brand = Model.BrandId, PretMin = Model.PretMin, PretMax = Model.PretMax, ItemsPerPage = Model.ItemsPerPage})">@i</a>
+                    <a class="page-link" href="@Url.Page("/Produse", new { PageIndex = i, CategorieId = Model.CategorieId, BrandId = Model.BrandId, PretMin = Model.PretMin, PretMax = Model.PretMax })">@i</a>
                 </li>
             }
         </ul>
     </nav>
-
 </div>

@@ -50,8 +50,8 @@ namespace Proiect_ip.Pages
         {
             var user = await userManager.GetUserAsync(User);
             var userId = user.Id;
-            //idee todo - serviciul creeaza comanda si returneaza dupa id-ul ei
-            return RedirectToPage("DetaliiPlata", new { userId });
+            var orderId = await cartService.PlaceOrderAsync(userId);
+            return RedirectToPage("/Plata", new { orderId });
         }
         public async Task<IActionResult> OnPostUpdateQuantityAsync(int productId, int cantitate)
         {

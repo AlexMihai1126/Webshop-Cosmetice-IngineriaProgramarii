@@ -66,9 +66,9 @@
         
         <h4>Totalul produselor din coș este de: @(Model.TotalCos) LEI</h4>
 
-        <form method="post" action="/DetaliiPlata">
+        <form method="post" asp-page-handler="CreateOrder">
             <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-outline-primary">Trimite Comanda - NEFUNCTIONAL</button>
+                <button type="submit" class="btn btn-outline-primary">Trimite Comanda</button>
             </div>
         </form>
     }

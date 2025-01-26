@@ -6,6 +6,13 @@
     int counter = 0;
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <h2>Comenzile mele</h2>
 
 @if (Model.Orders.Count == 0)

@@ -21,7 +21,6 @@ namespace Proiect_ip.Data
         public DbSet<IstoricPuncte> IstoricPuncte { get; set; }
         public DbSet<ComandaProdus> ComandaProduse { get; set; }
         public DbSet<Brand> Branduri { get; set; }
-        public DbSet<UserMetrics> UserMetrics { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -112,31 +111,6 @@ namespace Proiect_ip.Data
                 .HasOne(i => i.Comanda) // Cheie straina pt entitatea Comanda
                 .WithMany()
                 .HasForeignKey(i => i.IdComanda);
-
-            builder.Entity<UserMetrics>()
-                .HasKey(um => um.Id); // PK
-
-            builder.Entity<UserMetrics>()
-                .HasOne(um => um.Utilizator)
-                .WithOne(u => u.UserMetrics)
-                .HasForeignKey<UserMetrics>(um => um.Proiect_ipUserID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<UserMetrics>()
-                .Property(um => um.CheltuieliTotale)
-                .HasColumnType("decimal(10, 2)")
-                .HasDefaultValue(0.0m)
-                .IsRequired();
-
-            builder.Entity<UserMetrics>()
-                .Property(um => um.Nivel)
-                .HasDefaultValue(1)
-                .IsRequired();
-
-            builder.Entity<UserMetrics>()
-                .Property(um => um.UltimaActualizareNivel)
-                .IsRequired();
-
         }
     }
 }

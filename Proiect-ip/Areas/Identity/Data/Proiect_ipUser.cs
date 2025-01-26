@@ -11,14 +11,8 @@ namespace Proiect_ip.Areas.Identity.Data;
 // Add profile data for application users by adding properties to the Proiect_ipUser class
 public class Proiect_ipUser : IdentityUser
 {
-    [Required]
-    public string Nume { get; set; }
-    [Required]
-    public string Prenume { get; set; }
-    public string? Adresa { get; set; }
     public ICollection<Comanda> Comenzi { get; set; }
     public ICollection<IstoricPuncte> IstoricPuncte { get;set; }
-    public UserMetrics UserMetrics { get; set; }
 
 }
 
