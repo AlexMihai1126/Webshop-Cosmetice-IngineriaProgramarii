@@ -17,7 +17,9 @@ namespace Proiect_ip.Pages
             _context = context;
         }
 
-        public List<Produs> ProduseSlideshow { get; set; } 
+        public List<Produs> ProduseSlideshow { get; set; }
+        public List<Produs> ProduseFaraReducere { get; set; } // Produse fără reducere
+
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -25,16 +27,29 @@ namespace Proiect_ip.Pages
             var produseCuReducere = await _context.Produse
                 .Include(p => p.Categorie)
                 .Include(p => p.Brand)
-                .Where(p => p.Reducere != 0) // Filtrează doar produsele cu reducere
+                .Where(p => p.Reducere != 0) // Produsele cu reducere
                 .ToListAsync();
 
-            // Alege aleatoriu 28 de produse din lista filtrată
+            // Filtrează produsele care nu au reducere
+            var produseFaraReducere = await _context.Produse
+                .Include(p => p.Categorie)
+                .Include(p => p.Brand)
+                .Where(p => p.Reducere == 0) // Produsele fără reducere
+                .ToListAsync();
+
+            // Alege aleatoriu 28 de produse din fiecare categorie
             ProduseSlideshow = produseCuReducere
+                .OrderBy(x => Guid.NewGuid())
+                .Take(28)
+                .ToList();
+
+            ProduseFaraReducere = produseFaraReducere
                 .OrderBy(x => Guid.NewGuid())
                 .Take(28)
                 .ToList();
 
             return Page();
         }
+
     }
 }
