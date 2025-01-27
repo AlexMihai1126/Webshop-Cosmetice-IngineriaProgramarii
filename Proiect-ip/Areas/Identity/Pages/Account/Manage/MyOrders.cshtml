@@ -1,9 +1,9 @@
 ﻿@page
+@using Proiect_ip.Models
 @model Proiect_ip.Areas.Identity.Pages.Account.Manage.MyOrdersModel
 @{
     ViewData["Title"] = "Comenzile mele";
     Layout = "~/Areas/Identity/Pages/Account/Manage/_Layout.cshtml";
-    int counter = 0;
 }
 
 @if (TempData["SuccessMessage"] != null)
@@ -17,7 +17,9 @@
 
 @if (Model.Orders.Count == 0)
 {
-    <p>Nu exista comenzi.</p>
+    <div class="alert alert-secondary" role="alert">
+        Nu există comenzi.
+    </div>
 }
 else
 {
@@ -25,32 +27,38 @@ else
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">
                 <tr>
-                    <th>#</th>
-                    <th>Data</th>
+                    <th>ID</th>
+                    <th>Dată</th>
                     <th>Status</th>
-                    <th>Suma totala</th>
-                    <th>Actiuni</th>
+                    <th>Total</th>
+                    <th>Acțiuni</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var order in Model.Orders)
                 {
-                    counter += 1;
                     <tr>
-                        <td>@counter</td>
+                        <td>@order.IdComanda</td>
                         <td>@order.DataComanda.ToShortDateString()</td>
                         <td>@order.CStatus</td>
                         <td>@order.PretTotal.ToString() Lei</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-outline-primary btn-sm border-0" data-bs-toggle="modal" data-bs-target="#orderDetailsModal-@order.IdComanda">Vizualizare</button>
-                                @if (order.CStatus == Proiect_ip.Models.Comanda.ComandaStatus.InProcesare)
+                                @if (order.CStatus != Proiect_ip.Models.Comanda.ComandaStatus.Anulat){
+                                    <button type="button" class="btn btn-outline-primary btn-sm border-0" data-bs-toggle="modal" data-bs-target="#orderDetailsModal-@order.IdComanda">Vizualizare</button>
+                                    @if (order.CStatus == Proiect_ip.Models.Comanda.ComandaStatus.InProcesare)
+                                    {
+                                        <form method="post" asp-page-handler="CancelOrder">
+                                            <input type="hidden" name="orderId" value="@order.IdComanda" />
+                                            <button type="submit" class="btn btn-outline-danger btn-sm border-0">Anulare</button>
+                                        </form>
+                                    }
+                                } 
+                                else 
                                 {
-                                    <form method="post" asp-page-handler="CancelOrder">
-                                        <input type="hidden" name="orderId" value="@order.IdComanda" />
-                                        <button type="submit" class="btn btn-outline-danger btn-sm border-0">Anulare</button>
-                                    </form>
+                                    <p>Comandă anulată.</p>
                                 }
+                                
                             </div>
                             
                         </td>
@@ -59,47 +67,61 @@ else
             </tbody>
         </table>
     </div>
-    foreach(var order in Model.Orders){
-        <div class="modal fade" id="orderDetailsModal-@order.IdComanda" tabindex="-1" aria-labelledby="orderDetailsModalLabel-@order.IdComanda" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="orderDetailsModalLabel-@order.IdComanda">Detalii comanda</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>Nume produs</th>
-                                        <th>Pret unitar</th>
-                                        <th>Cantitate</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    @foreach (var produsDinComanda in order.ComandaProduse)
-                                    {
-                                        <tr>
-                                        <td>@produsDinComanda.Produs.Nume</td>
-                                        <td>@produsDinComanda.Produs.Pret.ToString() Lei</td>
-                                        <td>@produsDinComanda.Cantitate</td>
-                                        <td>@(produsDinComanda.Produs.Pret * produsDinComanda.Cantitate)</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                            <p>Pret total: @order.PretTotal</p>
-                            <p>Status: @order.CStatus</p>
+    @foreach(var order in Model.Orders){
+        if(order.CStatus != Comanda.ComandaStatus.Anulat){
+            <div class="modal fade" id="orderDetailsModal-@order.IdComanda" tabindex="-1" aria-labelledby="orderDetailsModalLabel-@order.IdComanda" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="orderDetailsModalLabel-@order.IdComanda">Detalii comanda</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Închide</button>
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Nume</th>
+                                            <th>Preț/buc</th>
+                                            <th>Cantitate</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var produsDinComanda in order.ComandaProduse)
+                                        {
+                                            <tr>
+                                                <td>@produsDinComanda.Produs.Nume</td>
+                                                <td>@produsDinComanda.PretUnitar.ToString() LEI</td>
+                                                <td>@produsDinComanda.Cantitate</td>
+                                                <td>@(produsDinComanda.PretUnitar * produsDinComanda.Cantitate) LEI</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <p>Destinatar: @order.Destinatar</p>
+                                <p>Email: @order.Utilizator.Email</p>
+                                <p>Adresă: @order.Adresa</p>
+                                <p>Telefon: @order.Telefon</p>
+                                <hr />
+                                <p>Status: @order.CStatus</p>
+                                <p>Plată: @order.PStatus</p>
+                                <p>Total comandă: @order.PretTotal LEI</p>
+                                <hr />
+                                <p>Puncte generate: @order.PuncteGenerate</p>
+                                <p>Puncte utilizate: @order.PuncteUtilizate</p>
+                                <p>Total fără reducere: @(order.PretTotal + order.Reducere) LEI</p>
+                                <p>Reducere aplicată: @order.Reducere LEI</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Închide</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
     }
 }

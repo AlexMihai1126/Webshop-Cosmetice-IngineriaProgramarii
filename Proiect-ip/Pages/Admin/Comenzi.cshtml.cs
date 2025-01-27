@@ -10,7 +10,7 @@ using Proiect_ip.Services;
 namespace Proiect_ip.Pages.Admin
 {
     [Authorize(Roles = "Admin")]
-    public class ComenziModel(UserManager<Proiect_ipUser> userManager, OrdersManagerService ordersManager, Proiect_ipContext context) : PageModel
+    public class ComenziModel(OrdersManagerService ordersManager) : PageModel
     {
         public List<Comanda> Orders { get; set; } = [];
         [BindProperty]

@@ -5,56 +5,84 @@
 }
 
 <div class="container mt-4">
-    <h2>@ViewData["Title"]</h2>
+    <h2 class="text-center">@ViewData["Title"]</h2>
+    <hr />
 
     <form method="post">
-        <input type="hidden" asp-for="Input.IdComanda" />
-
         <div class="mb-3">
-            <label asp-for="Input.Destinatar" class="form-label"></label>
-            <input asp-for="Input.Destinatar" class="form-control" />
-            <span asp-validation-for="Input.Destinatar" class="text-danger"></span>
+            <label asp-for="Destinatar" class="form-label"></label>
+            <input asp-for="Destinatar" class="form-control" />
+            <span asp-validation-for="Destinatar" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Input.Telefon" class="form-label"></label>
-            <input asp-for="Input.Telefon" class="form-control" />
-            <span asp-validation-for="Input.Telefon" class="text-danger"></span>
+            <label asp-for="Telefon" class="form-label"></label>
+            <input asp-for="Telefon" class="form-control" />
+            <span asp-validation-for="Telefon" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Input.Adresa" class="form-label"></label>
-            <input asp-for="Input.Adresa" class="form-control" />
-            <span asp-validation-for="Input.Adresa" class="text-danger"></span>
+            <label asp-for="Adresa" class="form-label"></label>
+            <input asp-for="Adresa" class="form-control" />
+            <span asp-validation-for="Adresa" class="text-danger"></span>
         </div>
 
-        <!-- Payment Options -->
-        <div class="mb-3">
-            <label class="form-label">Metoda de Plată</label>
-            <div>
-                <input type="radio" id="numerar" name="PaymentMethod" value="Numerar" checked
-                       onchange="toggleCardForm(false)" />
-                <label for="numerar">Numerar (Cash Payment)</label>
+        @if (Model.PointsBalance > 0)
+        {
+            <div class="mb-4">
+                <h5 class="mb-3">
+                    Ai putea economisi:
+                    <strong>@Model.ReducereComanda LEI</strong>
+                    folosind <strong>@Model.PointsUsed</strong> de puncte
+                    din totalul de <strong>@Model.PointsBalance</strong> disponibile.
+                </h5>
+                <div class="d-grid gap-2">
+                    <label class="btn btn-outline-primary" for="checkboxDiscount">
+                        <input type="checkbox" class="btn-check" asp-for="UsePoints" id="checkboxDiscount" onchange="updateTotalPrice()" autocomplete="off" />
+                        <span class="ms-2">Folosește punctele pentru reducere</span>
+                    </label>
+                </div>
             </div>
-            <div>
-                <input type="radio" id="card" name="PaymentMethod" value="Card"
-                       onchange="toggleCardForm(true)" />
-                <label for="card">Card (Credit/Debit Payment)</label>
+        }
+
+        <div class="mt-4">
+            <h4>
+                Total de plată:
+                <strong id="totalPrice"></strong>
+            </h4>
+            <h5>
+                Pentru această comandă vei acumula
+                <strong id="totalPuncte"></strong> puncte.
+            </h5>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label text-lg">Metoda de plată</label>
+            <br />
+            <div class="btn-group" role="group" aria-label="Metoda plata">
+                <input type="radio" class="btn-check" id="numerar" name="PaymentMethod" value="Numerar" checked
+                       onchange="toggleCardForm(false)" autocomplete="off">
+                <label class="btn btn-outline-secondary" for="numerar">Plata ramburs</label>
+
+                <input type="radio" class="btn-check" id="card" name="PaymentMethod" value="Card"
+                       onchange="toggleCardForm(true)" autocomplete="off">
+                <label class="btn btn-outline-secondary" for="card">Plata online cu cardul</label>
             </div>
         </div>
 
-        <!-- Card Details Form (Initially Hidden) -->
         <div id="card-details" class="mb-3" style="display: none;">
-            <label class="form-label">Card Details</label>
+            <label class="form-label">Date card</label>
             <div>
-                <input type="text" class="form-control mb-2" placeholder="Card Number" />
-                <input type="text" class="form-control mb-2" placeholder="Cardholder Name" />
-                <input type="text" class="form-control mb-2" placeholder="Expiration Date (MM/YY)" />
+                <input type="text" class="form-control mb-2" placeholder="Număr card" />
+                <input type="text" class="form-control mb-2" placeholder="Numele de pe card" />
+                <input type="text" class="form-control mb-2" placeholder="Dată expirare (MM/YY)" />
                 <input type="text" class="form-control mb-2" placeholder="CVV" />
             </div>
         </div>
-
-        <button type="submit" class="btn btn-primary">Confirmă Plată</button>
+        <div class="btn-group w-100" role="group">
+            <button type="submit" class="btn btn-outline-primary">Confirmă comanda</button>
+            <button type="button" onclick="window.location.href='/Cos'" class="btn btn-outline-secondary">Anulează</button>
+        </div>
     </form>
 
     @if (TempData["SuccessMessage"] != null)
@@ -68,10 +96,43 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        // Toggle visibility of card form
         function toggleCardForm(show) {
             const cardDetails = document.getElementById('card-details');
             cardDetails.style.display = show ? 'block' : 'none';
         }
+
+        function updateTotalPrice() {
+            const usePointsCheckbox = document.getElementById('checkboxDiscount');
+            const initialPrice = parseFloat(@Model.InitialPrice);
+            const discount = parseFloat(@Model.ReducereComanda);
+            let totalPrice = initialPrice;
+
+            if (usePointsCheckbox && usePointsCheckbox.checked) {
+                totalPrice -= discount;
+            }
+
+            document.getElementById('totalPrice').innerText = totalPrice.toFixed(2) + ' LEI';
+            document.getElementById('totalPuncte').innerText = totalPrice.toFixed(0);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const usePointsCheckbox = document.getElementById('checkboxDiscount');
+
+            // handle lipsa usePointsCheckbox daca utilizatorul are 0 puncte
+            if (usePointsCheckbox) {
+                usePointsCheckbox.addEventListener('change', function () {
+                    const label = this.closest('label');
+                    if (this.checked) {
+                        label.classList.add('active');
+                    } else {
+                        label.classList.remove('active');
+                    }
+                    updateTotalPrice();
+                });
+            }
+
+            updateTotalPrice();
+        });
     </script>
+
 }

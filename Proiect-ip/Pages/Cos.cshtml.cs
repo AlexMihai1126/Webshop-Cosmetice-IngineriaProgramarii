@@ -46,13 +46,11 @@ namespace Proiect_ip.Pages
             return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostCreateOrderAsync()
+        public IActionResult OnPostCreateOrderAsync()
         {
-            var user = await userManager.GetUserAsync(User);
-            var userId = user.Id;
-            var orderId = await cartService.PlaceOrderAsync(userId);
-            return RedirectToPage("/Plata", new { orderId });
+            return (RedirectToPage("/Plata"));
         }
+
         public async Task<IActionResult> OnPostUpdateQuantityAsync(int productId, int cantitate)
         {
             if (cantitate <= 0)
