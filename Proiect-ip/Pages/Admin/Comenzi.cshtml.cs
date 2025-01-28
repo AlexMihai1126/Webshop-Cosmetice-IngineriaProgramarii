@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -29,16 +29,19 @@ namespace Proiect_ip.Pages.Admin
         public async Task<IActionResult> OnPostCancelOrderAsync(int orderId)
         {
             await ordersManager.UpdateOrderStatusAsync(orderId,Comanda.ComandaStatus.Anulat);
+            TempData["SuccessMessage"] = $"Comanda {orderId} a fost anulată.";
             return RedirectToPage();
         }
         public async Task<IActionResult> OnPostConfirmOrderAsync(int orderId)
         {
             await ordersManager.UpdateOrderStatusAsync(orderId, Comanda.ComandaStatus.Confirmata);
+            TempData["SuccessMessage"] = $"Comanda {orderId} a fost confirmată.";
             return RedirectToPage();
         }
         public async Task<IActionResult> OnPostSendOrderAsync(int orderId)
         {
             await ordersManager.UpdateOrderStatusAsync(orderId, Comanda.ComandaStatus.Expediata);
+            TempData["SuccessMessage"] = $"Comanda {orderId} a fost expediată.";
             return RedirectToPage();
         }
     }

@@ -31,9 +31,9 @@
         {
             <div class="mb-4">
                 <h5 class="mb-3">
-                    Ai putea economisi:
+                    Ai putea economisi
                     <strong>@Model.ReducereComanda LEI</strong>
-                    folosind <strong>@Model.PointsUsed</strong> de puncte
+                    folosind <strong>@Model.PointsUsed</strong> puncte
                     din totalul de <strong>@Model.PointsBalance</strong> disponibile.
                 </h5>
                 <div class="d-grid gap-2">
@@ -112,7 +112,7 @@
             }
 
             document.getElementById('totalPrice').innerText = totalPrice.toFixed(2) + ' LEI';
-            document.getElementById('totalPuncte').innerText = totalPrice.toFixed(0);
+            document.getElementById('totalPuncte').innerText = Math.round(totalPrice);
         }
 
         document.addEventListener('DOMContentLoaded', function () {

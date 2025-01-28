@@ -7,8 +7,6 @@ using Proiect_ip.Services.DataCache;
 namespace Proiect_ip.Services;
 public class OrdersManagerService(Proiect_ipContext context, PointsService pointsService)
 {
-    private const float RataConversiePuncte = 0.1f; // 1p = 0.1 LEI
-    private const float DiscountMaximPerComanda = 0.25f; //25% din valoarea totala a comenzii poate fi redusa
     public async Task<List<Comanda>> GetAllOrdersAsync(Comanda.ComandaStatus? statusFilter, bool sortareDupaRecente)
     {
         IQueryable<Comanda> query = context.Comenzi.Include(c => c.Produse).Include(c => c.Utilizator).Include(c => c.ComandaProduse).ThenInclude(cp => cp.Produs);
@@ -51,6 +49,11 @@ public class OrdersManagerService(Proiect_ipContext context, PointsService point
             }
 
             context.ComandaProduse.RemoveRange(comanda.ComandaProduse);
+
+            if (comanda.PuncteUtilizate > 0)
+            {
+                await pointsService.ModifyPointsAsync(comanda.Proiect_ipUserID, +comanda.PuncteUtilizate, $"Anulare comanda {idComanda}.", idComanda);
+            } // restaureaza punctele consumate utilizatorului
         }
 
         if (newStatus == Comanda.ComandaStatus.Confirmata)
@@ -107,6 +110,12 @@ public class OrdersManagerService(Proiect_ipContext context, PointsService point
 
         context.ComandaProduse.RemoveRange(comanda.ComandaProduse);
         await context.SaveChangesAsync();
+
+        if (comanda.PuncteUtilizate > 0)
+        {
+            await pointsService.ModifyPointsAsync(comanda.Proiect_ipUserID, +comanda.PuncteUtilizate, $"Anulare comanda {idComanda}.", idComanda);
+        } // restaureaza punctele consumate utilizatorului
+
     }//Clientul isi poate anula singur comanda
 
 }

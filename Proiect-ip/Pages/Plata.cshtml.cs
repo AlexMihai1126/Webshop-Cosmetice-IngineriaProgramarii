@@ -176,7 +176,7 @@ namespace Proiect_ip.Pages
                         Proiect_ipUserID = userId,
                         DataComanda = DateTime.UtcNow,
                         PretTotal = FinalPrice,
-                        PuncteGenerate = (int)Math.Ceiling(FinalPrice),
+                        PuncteGenerate = (int)Math.Round(FinalPrice),
                         PuncteUtilizate = PointsUsed,
                         Reducere = ReducereComanda,
                         Destinatar = Destinatar,

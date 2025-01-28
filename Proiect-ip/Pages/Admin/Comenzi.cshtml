@@ -4,11 +4,29 @@
 @using Proiect_ip.Models
 @attribute [Authorize(Roles = "Admin")]
 @{
+    ViewData["Title"] = "Admin comenzi";
     int counter = 0;
 }
 <div class="container-fluid">
     <h2 class="text-center">Vizualizare comenzi</h2>
     <hr />
+    @{
+        if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Închide"></button>
+            </div>
+        }
+
+        if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Închide"></button>
+            </div>
+        }
+    }
     <form method="get" asp-page="./Comenzi">
         <div class="container-fluid mx-auto d-flex justify-content-center">
             <div class="btn-group ms-3" role="group" aria-label="Optiuni filtrare">
@@ -62,9 +80,9 @@
                             <td>@order.PretTotal.ToString() Lei</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    @if (order.CStatus != Proiect_ip.Models.Comanda.ComandaStatus.Anulat){
+                                    @if (order.CStatus != Comanda.ComandaStatus.Anulat){
                                         <button type="button" class="btn btn-outline-primary btn-sm border-0" data-bs-toggle="modal" data-bs-target="#orderDetailsModal-@order.IdComanda">Vizualizare</button>
-                                        @if (order.CStatus == Proiect_ip.Models.Comanda.ComandaStatus.InProcesare)
+                                        @if (order.CStatus ==Comanda.ComandaStatus.InProcesare)
                                         {
                                             <form method="post" asp-page-handler="CancelOrder">
                                                 <input type="hidden" name="orderId" value="@order.IdComanda" />
@@ -85,7 +103,7 @@
                                     } 
                                     else
                                     {
-                                        <p>Comandă anulată.</p>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm border-0" disabled>Vizualizare</button>
                                     }
                                 </div>
                             </td>

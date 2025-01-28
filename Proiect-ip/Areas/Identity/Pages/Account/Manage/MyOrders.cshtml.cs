@@ -33,6 +33,7 @@ namespace Proiect_ip.Areas.Identity.Pages.Account.Manage
         {
             var currentUser = await userManager.GetUserAsync(User);
             await ordersManager.CancelOrderAsync(orderId,currentUser.Id);
+            TempData["SuccessMessage"] = "Comanda a fost anulata cu succes!";
             return RedirectToPage();
         }
     }
