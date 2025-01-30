@@ -7,10 +7,24 @@
 
 <div class="container-fluid mt-4">
     <div class="text-center">
-        <h2>Bun venit la ARC Cosmetics</h2>
+        <h1>Bun venit la ARC Cosmetics</h1>
     </div>
     <hr />
+    <div class="full-screen-image">
+        <img src="/images/banner1.png" alt="ARC Cosmetics Logo" class="img-fluid">
+    </div>
+    <hr />
+    <style>
+        .full-screen-image img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+    </style>
     <div id="productSlideshow" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="4000">
+        <div class="text-center">
+            <h2>Reduceri</h2>
+        </div>
         <div class="carousel-inner">
             @if (Model.ProduseSlideshow.Any())
             {
@@ -94,6 +108,9 @@
     </div>
 
     <div id="productSlideshowNoDiscount" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="text-center">
+            <h2>Recomandări</h2>
+        </div>
         <div class="carousel-inner">
             @if (Model.ProduseFaraReducere.Any())
             {
